@@ -38,18 +38,13 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
             if (!hoveredElement) return;
 
             if (hoveredElement.className === styles.column && !!cards.length) {
-                // dispatch(setHoveredCard({card: cards[cards.length - 1], from: "bottom"}))
+                dispatch(setHoveredCard({card: cards[cards.length - 1], from: "bottom"}))
             }
 
 
         },
         drop: () => {
-            dispatch(insertCard({
-                fromList,
-                toList,
-                draggableCard: draggableCard?.card,
-                hoveredCard
-            }));
+
         },
     }), [fromList, toList, draggableCard, listId, isDragging])
 
