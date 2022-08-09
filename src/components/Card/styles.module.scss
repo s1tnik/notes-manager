@@ -1,0 +1,35 @@
+.shallowCard {
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  background-color: transparent;
+  width: 100%;
+  border-radius: 10px;
+}
+
+
+.card {
+  padding: 20px;
+  background-color: #F4F4F4;
+  border-radius: 10px;
+  height: max-content;
+  width: 100%;
+
+  :global {
+
+
+    .title {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+
+    .description {
+      margin-top: 4px;
+      opacity: 0.4;
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 19px;
+    }
+  }
+}
+

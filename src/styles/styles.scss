@@ -1,0 +1,25 @@
+@use "reset";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.wrapper {
+  min-height: 100vh;
+  overflow-y: visible;
+  overflow-x: scroll;
+}
+
+.cards-container {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  height: 100vh;
+
+  > div {
+    min-width: 20vw;
+  }
+
+
+}

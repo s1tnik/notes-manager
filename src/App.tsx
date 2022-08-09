@@ -1,11 +1,35 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import Column from './components/Column';
+import EmptyCard from './components/EmptyCard';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useSelector } from 'react-redux';
+import { RootState } from './app/store';
+import { useAppDispatch } from './app/hooks';
+import { addList } from './app/listsSlice';
 
 function App() {
-  return (
-    <div className="App">
-        App
-    </div>
-  );
+
+    const lists = Object.entries(useSelector((state: RootState) => state.lists)).map(([id, list]) => ({id, ...list}))
+    const dispatch = useAppDispatch();
+
+    const onAddList = (): void => {
+        dispatch(addList({id: uuidv4(), cards: [], name: uuidv4()}))
+    }
+
+
+    return (
+        <DndProvider backend={HTML5Backend}>
+            <div className="wrapper">
+                <div className="cards-container">
+                    {!!lists.length && lists.map(list => <Column key={list.id} {...list}/>)}
+                    <EmptyCard onClick={onAddList} title="Create a new list"/>
+                </div>
+            </div>
+        </DndProvider>
+    );
+
 }
 
 export default App;

@@ -1,0 +1,20 @@
+.emptyCard {
+  cursor: pointer;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  padding: 30px 0;
+  background-color: transparent;
+  border-radius: 10px;
+  height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  :global {
+
+    .title {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+  }
+}

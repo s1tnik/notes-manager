@@ -1,0 +1,22 @@
+.column {
+  height: 100%;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: content-box;
+  }
+}
+
+.columnHeader {
+  border: 1px solid aqua;
+  border-radius: 10px;
+  background-color: #F4F4F4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 400;
+}
