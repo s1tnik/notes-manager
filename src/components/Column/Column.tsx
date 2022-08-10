@@ -37,16 +37,16 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
 
             if (!hoveredElement) return;
 
-            if (hoveredElement.className === styles.column && !!cards.length) {
-                dispatch(setHoveredCard({card: cards[cards.length - 1], from: "bottom"}))
+            if (hoveredElement.className === styles.column || !cards.length) {
+                dispatch(setHoveredCard(undefined))
             }
 
 
         },
         drop: () => {
-
+            dispatch(insertCard({fromList, toList, draggableCard: draggableCard?.card, hoveredCard}))
         },
-    }), [fromList, toList, draggableCard, listId, isDragging])
+    }), [fromList, toList, draggableCard, listId, isDragging, hoveredCard])
 
     const onAddCard = (): void => {
         dispatch(addCard({listId, card: {title: uuidv4(), id: uuidv4()}}))
@@ -56,8 +56,8 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
         <div ref={drop} className={styles.column}>
             <div>
                 <ColumnHeader header={name}/>
-                {!!cards.length && cards.map((card) => <Card listId={listId} card={card}/>)}
-                {!cards.length && toList === listId && isDragging &&
+                {!!cards.length && cards.map((card) => <Card key={card.id} listId={listId} card={card}/>)}
+                {!hoveredCard && toList === listId &&
                 <EmptyCard style={{height: draggableCard?.height}}/>}
                 <EmptyCard onClick={onAddCard} title="+ Add new card"/>
             </div>

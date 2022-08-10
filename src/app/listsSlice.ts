@@ -52,20 +52,28 @@ export const listsSlice = createSlice({
         }>) => {
             const {fromList, toList, draggableCard, hoveredCard} = action.payload;
 
-            console.log(fromList, toList)
-
             if (fromList && toList && draggableCard) {
-                const filteredFromList = state[fromList].cards.filter(({id}) => id !== draggableCard.id)
-                state[fromList].cards = filteredFromList;
-
-                const hoveredCardIndex = state[toList].cards.findIndex(({id}) => id === hoveredCard?.card.id);
-
-                if (!state[toList].cards.length || !hoveredCard) {
-                    state[toList].cards.push(draggableCard)
+                if (!hoveredCard) {
+                    state[fromList].cards = state[fromList].cards.filter(({id}) => id !== draggableCard.id);
+                    state[toList].cards.push(draggableCard);
                 } else {
-                    hoveredCard.from === "top" ?
-                        state[toList].cards.splice(hoveredCardIndex, 0, draggableCard)
-                        : state[toList].cards.splice(hoveredCardIndex - 1, 0, draggableCard);
+
+                    const hoveredCardIndex = state[toList].cards.findIndex(({id}) => id === hoveredCard.card.id);
+                    const draggableCardIndex = state[fromList].cards.findIndex(({id}) => id === draggableCard.id);
+                    const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
+
+
+                    if (fromList === toList) {
+                        // const filteredList = state[toList].cards.filter(({id}) => id !== draggableCard.id);
+                        // filteredList.splice(1, 0, draggableCard);
+                        // state[toList].cards = filteredList;
+
+                        // TODO: Make insertion work inside the same list
+                    } else {
+                        state[fromList].cards = state[fromList].cards.filter(({id}) => id !== draggableCard.id);
+                        state[toList].cards.splice(insertIndex, 0, draggableCard)
+                    }
+
                 }
             }
         }

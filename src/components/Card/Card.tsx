@@ -20,16 +20,19 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
     const {id, title, description} = card;
 
     const dispatch = useAppDispatch();
-    const {hoveredCard, isDragging, toList, draggableCard} = useSelector((state: RootState) => state.dragging);
+    const {hoveredCard, draggableCard} = useSelector((state: RootState) => state.dragging);
 
     const cardRef = useRef<HTMLDivElement>(null);
 
-    const [{isDraggingElement}, drag] = useDrag(() => ({
+    const [{isDraggingCard}, drag] = useDrag(() => ({
         type: ItemTypes.CARD,
+        end: () => {
+            dispatch(resetDraggingState())
+        },
         collect: monitor => ({
-            isDraggingElement: !!monitor.isDragging(),
+            isDraggingCard: monitor.isDragging(),
         }),
-    }), [])
+    }))
 
     const [, drop] = useDrop(() => ({
         accept: ItemTypes.CARD,
@@ -42,8 +45,6 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
             const y = clientOffset.y - rect.top;
             const height = rect.height;
 
-            const hoveredCardCommonProps = {cardId: id, height: cardRef.current.clientHeight}
-
             if (y > height / 2) {
                 dispatch(setHoveredCard({from: "bottom", card}))
             } else {
@@ -51,34 +52,37 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
             }
         },
 
-    }))
+    }), [cardRef.current])
 
     useEffect(() => {
-        dispatch(setIsDragging(isDraggingElement));
 
-        if (isDraggingElement && cardRef.current) {
+        dispatch(setIsDragging(isDraggingCard));
+
+        if (cardRef.current && isDraggingCard) {
             const card = {title, description, id}
             dispatch(setDraggableCard({card, height: cardRef.current.clientHeight}));
             dispatch(setFromList(listId));
-        } else {
-            dispatch(resetDraggingState())
         }
 
+    }, [isDraggingCard, description, dispatch, id, listId, title]);
 
-    }, [isDraggingElement, description, dispatch, id, listId, title]);
 
-
-    const renderShallowCard = id === hoveredCard?.card.id && toList === listId && isDragging;
-
+    const renderShallowCard = id === hoveredCard?.card.id;
 
     return (
         <>
             {renderShallowCard && hoveredCard?.from === "top" &&
             <EmptyCard style={{height: draggableCard?.height}}/>}
-            {!isDraggingElement ? <div ref={mergeRefs([drag, drop, cardRef])} className={styles.card}>
+
+            {(!draggableCard || draggableCard.card.id !== card.id) &&
+            <div ref={mergeRefs([drag, drop, cardRef])} className={styles.card}>
                 <p className="title">{title}</p>
                 {description && <p className="description">{description}</p>}
-            </div> : null}
+            </div>
+            }
+
+            {!draggableCard && isDraggingCard && <EmptyCard style={{height: cardRef.current?.clientHeight}}/>}
+
             {renderShallowCard && hoveredCard?.from === "bottom" &&
             <EmptyCard style={{height: draggableCard?.height}}/>}
         </>

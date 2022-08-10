@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ICard} from '../types';
 
 export interface DraggingState {
-    isDragging: boolean;
+    isDragging?: boolean;
     fromList?: string;
     toList?: string;
     draggableCard?: {
@@ -16,7 +16,6 @@ export interface DraggingState {
 }
 
 const initialState: DraggingState = {
-    isDragging: false,
 };
 export const draggingSlice = createSlice({
     name: 'draggable card',
@@ -38,7 +37,7 @@ export const draggingSlice = createSlice({
             state.hoveredCard = action.payload
         },
         resetDraggingState: (state) => {
-            state = initialState;
+            return initialState;
         }
     },
 });

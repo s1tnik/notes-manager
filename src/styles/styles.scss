@@ -9,13 +9,14 @@ body {
   min-height: 100vh;
   overflow-y: visible;
   overflow-x: scroll;
+  display: flex;
 }
 
 .cards-container {
+  flex: 1;
   display: flex;
   gap: 30px;
   padding: 30px;
-  height: 100vh;
 
   > div {
     min-width: 20vw;
