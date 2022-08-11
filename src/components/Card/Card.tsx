@@ -65,24 +65,25 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
     }, [isDraggingCard, description, dispatch, id, listId, title]);
 
 
-    const renderShallowCard = id === hoveredCard?.card.id;
+    if (!draggableCard || draggableCard.card.id !== card.id) {
 
-    return (
-        <>
-            {renderShallowCard && hoveredCard?.from === "top" &&
-            <EmptyCard style={{height: draggableCard?.height}}/>}
+        const renderShallowCard = !!hoveredCard && id === hoveredCard.card.id;
 
-            {(!draggableCard || draggableCard.card.id !== card.id) &&
-            <div ref={mergeRefs([drag, drop, cardRef])} className={styles.card}>
-                <p className="title">{title}</p>
-                {description && <p className="description">{description}</p>}
-            </div>
-            }
+        return (
+            <>
+                {renderShallowCard && hoveredCard?.from === "top" &&
+                <EmptyCard style={{height: draggableCard?.height}}/>}
 
-            {!draggableCard && isDraggingCard && <EmptyCard style={{height: cardRef.current?.clientHeight}}/>}
+                <div ref={mergeRefs([drag, drop, cardRef])} className={styles.card}>
+                    <p className="title">{title}</p>
+                    {description && <p className="description">{description}</p>}
+                </div>
 
-            {renderShallowCard && hoveredCard?.from === "bottom" &&
-            <EmptyCard style={{height: draggableCard?.height}}/>}
-        </>
-    )
+                {renderShallowCard && hoveredCard?.from === "bottom" &&
+                <EmptyCard style={{height: draggableCard?.height}}/>}
+            </>
+        )
+    }
+
+    return null;
 }
