@@ -52,8 +52,8 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
     }
 
     return (
-        <div ref={drop} className={styles.column}>
-            <div>
+        <div ref={drop} className={styles.wrapper}>
+            <div className="column">
                 <ColumnHeader header={name}/>
                 {!!cards.length && cards.map((card) => <Card key={card.id} listId={listId} card={card}/>)}
                 {!hoveredCard && toList === listId &&

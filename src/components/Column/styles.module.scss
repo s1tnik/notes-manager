@@ -1,11 +1,13 @@
-.column {
+.wrapper {
   height: 100%;
 
-  > div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    height: content-box;
+  & :global {
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: content-box;
+    }
   }
 }
 
