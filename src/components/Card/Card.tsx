@@ -3,7 +3,7 @@ import styles from "./styles.module.scss"
 import {useDrag, useDrop} from 'react-dnd'
 import {ICard, ItemTypes} from '../../types/index'
 import {useAppDispatch} from "../../app/hooks";
-import {setFromList, setDraggableCard, setIsDragging, setHoveredCard, resetDraggingState} from "../../app/draggingSlice"
+import {setFromList, setDraggableCard, setHoveredCard, resetDraggingState} from "../../app/draggingSlice"
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
@@ -55,8 +55,6 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
     }), [cardRef.current])
 
     useEffect(() => {
-
-        dispatch(setIsDragging(isDraggingCard));
 
         if (cardRef.current && isDraggingCard) {
             const card = {title, description, id}

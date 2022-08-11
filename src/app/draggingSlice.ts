@@ -1,10 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ICard} from '../types';
+import {List, ICard} from '../types';
 
 export interface DraggingState {
-    isDragging?: boolean;
-    fromList?: string;
-    toList?: string;
     draggableCard?: {
         card: ICard;
         height: number;
@@ -13,10 +10,21 @@ export interface DraggingState {
         card: ICard;
         from: "top" | "bottom"
     }
+
+    draggableList?: {
+        list: List;
+        height: number;
+    };
+    hoveredList?: {
+        list: List;
+        from: "left" | "right"
+    }
+
+    fromList?: string;
+    toList?: string;
 }
 
-const initialState: DraggingState = {
-};
+const initialState: DraggingState = {};
 export const draggingSlice = createSlice({
     name: 'draggable card',
     initialState,
@@ -30,18 +38,29 @@ export const draggingSlice = createSlice({
         setDraggableCard: (state, action: PayloadAction<DraggingState['draggableCard']>) => {
             state.draggableCard = action.payload;
         },
-        setIsDragging: (state, action: PayloadAction<DraggingState['isDragging']>) => {
-            state.isDragging = action.payload;
-        },
         setHoveredCard: (state, action: PayloadAction<DraggingState['hoveredCard']>) => {
             state.hoveredCard = action.payload
         },
+        setDraggableList: (state, action: PayloadAction<DraggingState['draggableList']>) => {
+            state.draggableList = action.payload;
+        },
+        setHoveredList: (state, action: PayloadAction<DraggingState['hoveredList']>) => {
+            state.hoveredList = action.payload
+        },
         resetDraggingState: (state) => {
             return initialState;
-        }
+        },
     },
 });
 
-export const {setFromList, setToList, setDraggableCard, setIsDragging, setHoveredCard, resetDraggingState} = draggingSlice.actions;
+export const {
+    setFromList,
+    setToList,
+    setDraggableCard,
+    setHoveredCard,
+    resetDraggingState,
+    setDraggableList,
+    setHoveredList
+} = draggingSlice.actions;
 
 export default draggingSlice.reducer;

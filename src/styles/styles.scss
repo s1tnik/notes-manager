@@ -19,8 +19,6 @@ body {
   padding: 30px;
 
   > div {
-    min-width: 20vw;
+    width: max(300px, 20vw);
   }
-
-
 }

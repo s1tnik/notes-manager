@@ -58,18 +58,18 @@ export const listsSlice = createSlice({
                     state[toList].cards.push(draggableCard);
                 } else {
 
-                    const hoveredCardIndex = state[toList].cards.findIndex(({id}) => id === hoveredCard.card.id);
-                    const draggableCardIndex = state[fromList].cards.findIndex(({id}) => id === draggableCard.id);
-                    const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
-
-
                     if (fromList === toList) {
-                        // const filteredList = state[toList].cards.filter(({id}) => id !== draggableCard.id);
-                        // filteredList.splice(1, 0, draggableCard);
-                        // state[toList].cards = filteredList;
+                        const filteredList = state[toList].cards.filter(({id}) => id !== draggableCard.id);
 
-                        // TODO: Make insertion work inside the same list
+                        const hoveredCardIndex = filteredList.findIndex(({id}) => id === hoveredCard.card.id);
+                        const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
+
+                        filteredList.splice(insertIndex, 0, draggableCard);
+                        state[toList].cards = filteredList;
                     } else {
+                        const hoveredCardIndex = state[toList].cards.findIndex(({id}) => id === hoveredCard.card.id);
+                        const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
+
                         state[fromList].cards = state[fromList].cards.filter(({id}) => id !== draggableCard.id);
                         state[toList].cards.splice(insertIndex, 0, draggableCard)
                     }

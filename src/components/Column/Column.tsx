@@ -19,7 +19,6 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
         fromList,
         toList,
         draggableCard,
-        isDragging,
         hoveredCard
     } = useSelector((state: RootState) => state.dragging);
 
@@ -46,7 +45,7 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
         drop: () => {
             dispatch(insertCard({fromList, toList, draggableCard: draggableCard?.card, hoveredCard}))
         },
-    }), [fromList, toList, draggableCard, listId, isDragging, hoveredCard])
+    }), [fromList, toList, draggableCard, listId, hoveredCard])
 
     const onAddCard = (): void => {
         dispatch(addCard({listId, card: {title: uuidv4(), id: uuidv4()}}))
