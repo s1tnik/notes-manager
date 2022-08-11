@@ -64,7 +64,7 @@ export const listsSlice = createSlice({
 
             if (fromList && toList && draggableCard) {
                 if (!hoveredCard) {
-                    state[fromList.id].cards = state[fromList.id].cards.filter(({id}) => id !== draggableCard.card.id);
+                    state[fromList.id].cards.splice(draggableCard.index, 1);
                     state[toList.id].cards.push(draggableCard.card);
                 } else {
 
@@ -80,7 +80,7 @@ export const listsSlice = createSlice({
                         const hoveredCardIndex = state[toList.id].cards.findIndex(({id}) => id === hoveredCard.card.id);
                         const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
 
-                        state[fromList.id].cards = state[fromList.id].cards.filter(({id}) => id !== draggableCard.card.id);
+                        state[fromList.id].cards.splice(draggableCard.index, 1);
                         state[toList.id].cards.splice(insertIndex, 0, draggableCard.card)
                     }
 
