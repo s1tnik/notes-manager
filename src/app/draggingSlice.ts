@@ -5,23 +5,33 @@ export interface DraggingState {
     draggableCard?: {
         card: ICard;
         height: number;
+        index: number;
     };
     hoveredCard?: {
         card: ICard;
         from: "top" | "bottom"
+        index: number;
     }
 
     draggableList?: {
         list: List;
         height: number;
+        index: number;
     };
     hoveredList?: {
         list: List;
         from: "left" | "right"
+        index: number;
     }
 
-    fromList?: string;
-    toList?: string;
+    fromList?: {
+        index: number;
+        id: string;
+    };
+    toList?: {
+        index: number;
+        id: string;
+    }
 }
 
 const initialState: DraggingState = {};

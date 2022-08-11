@@ -13,9 +13,11 @@ interface CardProps {
     card: ICard
     onClick?: () => void;
     listId: string;
+    listIndex: number;
+    index: number;
 }
 
-export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
+export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, index}) => {
 
     const {id, title, description} = card;
 
@@ -46,9 +48,9 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
             const height = rect.height;
 
             if (y > height / 2) {
-                dispatch(setHoveredCard({from: "bottom", card}))
+                dispatch(setHoveredCard({from: "bottom", card, index}))
             } else {
-                dispatch(setHoveredCard({from: "top", card}))
+                dispatch(setHoveredCard({from: "top", card, index}))
             }
         },
 
@@ -58,8 +60,8 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick}) => {
 
         if (cardRef.current && isDraggingCard) {
             const card = {title, description, id}
-            dispatch(setDraggableCard({card, height: cardRef.current.clientHeight}));
-            dispatch(setFromList(listId));
+            dispatch(setDraggableCard({card, height: cardRef.current.clientHeight, index}));
+            dispatch(setFromList({id: listId, index: listIndex}));
         }
 
     }, [isDraggingCard, description, dispatch, id, listId, title]);

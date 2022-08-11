@@ -42,11 +42,21 @@ export const listsSlice = createSlice({
             state[listId].cards = filteredCards;
         },
         insertCard: (state, action: PayloadAction<{
-            fromList?: string;
-            toList?: string;
-            draggableCard?: ICard
+            fromList?: {
+                id: string;
+                index: number;
+            };
+            toList?: {
+                id: string;
+                index: number;
+            };
+            draggableCard?: {
+              card: ICard;
+              index: number;
+            };
             hoveredCard?: {
                 card: ICard;
+                index: number;
                 from: "top" | "bottom"
             }
         }>) => {
@@ -54,24 +64,24 @@ export const listsSlice = createSlice({
 
             if (fromList && toList && draggableCard) {
                 if (!hoveredCard) {
-                    state[fromList].cards = state[fromList].cards.filter(({id}) => id !== draggableCard.id);
-                    state[toList].cards.push(draggableCard);
+                    state[fromList.id].cards = state[fromList.id].cards.filter(({id}) => id !== draggableCard.card.id);
+                    state[toList.id].cards.push(draggableCard.card);
                 } else {
 
-                    if (fromList === toList) {
-                        const filteredList = state[toList].cards.filter(({id}) => id !== draggableCard.id);
+                    if (fromList.id === toList.id) {
+                        const filteredList = state[toList.id].cards.filter(({id}) => id !== draggableCard.card.id);
 
                         const hoveredCardIndex = filteredList.findIndex(({id}) => id === hoveredCard.card.id);
                         const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
 
-                        filteredList.splice(insertIndex, 0, draggableCard);
-                        state[toList].cards = filteredList;
+                        filteredList.splice(insertIndex, 0, draggableCard.card);
+                        state[toList.id].cards = filteredList;
                     } else {
-                        const hoveredCardIndex = state[toList].cards.findIndex(({id}) => id === hoveredCard.card.id);
+                        const hoveredCardIndex = state[toList.id].cards.findIndex(({id}) => id === hoveredCard.card.id);
                         const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
 
-                        state[fromList].cards = state[fromList].cards.filter(({id}) => id !== draggableCard.id);
-                        state[toList].cards.splice(insertIndex, 0, draggableCard)
+                        state[fromList.id].cards = state[fromList.id].cards.filter(({id}) => id !== draggableCard.card.id);
+                        state[toList.id].cards.splice(insertIndex, 0, draggableCard.card)
                     }
 
                 }

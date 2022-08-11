@@ -12,7 +12,14 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {setToList, setHoveredCard} from "../../app/draggingSlice";
 
-export const Column: React.FC<List> = ({name, cards, id: listId}) => {
+interface ColumnProps {
+    list: List;
+    index: number
+}
+
+export const Column: React.FC<ColumnProps> = ({list, index}) => {
+
+    const {cards, id, name} = list;
 
     const dispatch = useAppDispatch();
     const {
@@ -26,7 +33,7 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
         accept: ItemTypes.CARD,
 
         hover: (_, monitor) => {
-            dispatch(setToList(listId))
+            dispatch(setToList({index, id}))
 
             const offset = monitor.getClientOffset();
 
@@ -36,27 +43,29 @@ export const Column: React.FC<List> = ({name, cards, id: listId}) => {
 
             if (!hoveredElement) return;
 
-            if (hoveredElement.className === styles.column || !cards.length) {
+            if (hoveredElement.className === styles.wrapper || !cards.length) {
                 dispatch(setHoveredCard(undefined))
             }
 
 
         },
         drop: () => {
-            dispatch(insertCard({fromList, toList, draggableCard: draggableCard?.card, hoveredCard}))
+            dispatch(insertCard({fromList, toList, draggableCard, hoveredCard}))
         },
-    }), [fromList, toList, draggableCard, listId, hoveredCard])
+    }), [fromList, toList, draggableCard, id, hoveredCard])
 
     const onAddCard = (): void => {
-        dispatch(addCard({listId, card: {title: uuidv4(), id: uuidv4()}}))
+        dispatch(addCard({listId: id, card: {title: uuidv4(), id: uuidv4()}}))
     }
 
     return (
         <div ref={drop} className={styles.wrapper}>
             <div className="column">
                 <ColumnHeader header={name}/>
-                {!!cards.length && cards.map((card) => <Card key={card.id} listId={listId} card={card}/>)}
-                {!hoveredCard && toList === listId &&
+                {!!cards.length && cards.map((card, cardIndex) => <Card index={cardIndex} listIndex={index}
+                                                                        key={card.id} listId={id}
+                                                                        card={card}/>)}
+                {!hoveredCard && toList?.id === id &&
                 <EmptyCard style={{height: draggableCard?.height}}/>}
                 <EmptyCard onClick={onAddCard} title="+ Add new card"/>
             </div>
