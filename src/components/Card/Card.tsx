@@ -22,7 +22,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
     const {id, title, description} = card;
 
     const dispatch = useAppDispatch();
-    const {hoveredCard, draggableCard} = useSelector((state: RootState) => state.dragging);
+    const {hoveredCard, draggableCard, toList} = useSelector((state: RootState) => state.dragging);
 
     const cardRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +69,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
     if (!draggableCard || draggableCard.card.id !== card.id) {
 
-        const renderShallowCard = !!hoveredCard && id === hoveredCard.card.id;
+        const renderShallowCard = !!hoveredCard && id === hoveredCard.card.id && toList?.id === listId;
 
         return (
             <>

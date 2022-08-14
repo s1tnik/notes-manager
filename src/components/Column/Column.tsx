@@ -29,7 +29,9 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
         fromList,
         toList,
         draggableList,
-        hoveredList
+        hoveredList,
+        draggableCard,
+        hoveredCard
     } = useSelector((state: RootState) => state.dragging);
 
     const [{isDraggingList}, drag] = useDrag(() => ({
@@ -45,23 +47,16 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
     const [, drop] = useDrop(() => ({
         accept: [ItemTypes.CARD, ItemTypes.LIST],
         hover: (_, monitor) => {
-            dispatch(setToList({index, id}))
+            dispatch(setToList({index, id}));
+
+            if (toList?.id !== id) {
+                dispatch(setHoveredCard(undefined));
+            }
 
             const itemType = monitor.getItemType();
             const clientOffset = monitor.getClientOffset();
 
             if (!clientOffset) return;
-
-
-            if (itemType === ItemTypes.CARD) {
-                const hoveredElement = window.document.elementFromPoint(clientOffset.x, clientOffset.y);
-
-                if (!hoveredElement) return;
-
-                if (hoveredElement.className === styles.wrapper || !cards.length) {
-                    dispatch(setHoveredCard(undefined))
-                }
-            }
 
             if (itemType === ItemTypes.LIST && columnRef.current) {
                 const rect = columnRef.current.getBoundingClientRect();
@@ -105,6 +100,8 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
                         {!!cards.length && cards.map((card, cardIndex) => <Card index={cardIndex} listIndex={index}
                                                                                 key={card.id} listId={id}
                                                                                 card={card}/>)}
+                        {toList?.id === list.id && draggableCard && !hoveredCard &&
+                        <EmptyCard style={{height: draggableCard.height}}/>}
                         <EmptyCard onClick={onAddCard} title="+ Add new card"/>
                     </div>
                 </div>
