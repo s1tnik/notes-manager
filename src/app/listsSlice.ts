@@ -32,6 +32,44 @@ export const listsSlice = createSlice({
         removeList: (state, action: PayloadAction<string>) => {
             delete state[action.payload]
         },
+        insertList: (state, action: PayloadAction<{
+            draggableList?: {
+                list: List;
+                index: number;
+            };
+            hoveredList?: {
+                list: List;
+                index: number;
+                from: "left" | "right"
+            }
+        }>) => {
+            const {draggableList, hoveredList} = action.payload
+
+            if (draggableList) {
+
+                if (!hoveredList) {
+                    return state;
+                } else {
+                    const stateKeys = Object.keys(state);
+                    const filteredKeys = stateKeys.filter(key => key !== draggableList.list.id)
+
+                    const hoveredListIndex = filteredKeys.findIndex(key => key === hoveredList.list.id);
+                    const insertIndex = hoveredList.from === "right" ? hoveredListIndex + 1 : hoveredListIndex;
+
+                    filteredKeys.splice(insertIndex, 0, draggableList.list.id);
+
+                    const updatedState: typeof state = {};
+
+                    for (const key in filteredKeys) {
+                        updatedState[key] = state[key];
+                    }
+
+                    state = updatedState;
+                }
+            }
+
+
+        },
         addCard: (state, action: PayloadAction<{ listId: string, card: ICard }>) => {
             const {listId, card} = action.payload
             state[listId].cards.push(card)
@@ -51,8 +89,8 @@ export const listsSlice = createSlice({
                 index: number;
             };
             draggableCard?: {
-              card: ICard;
-              index: number;
+                card: ICard;
+                index: number;
             };
             hoveredCard?: {
                 card: ICard;
@@ -105,7 +143,7 @@ export const listsSlice = createSlice({
     // },
 });
 
-export const {addList, removeList, addCard, removeCard, insertCard} = listsSlice.actions;
+export const {addList, removeList, addCard, removeCard, insertCard, insertList} = listsSlice.actions;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.

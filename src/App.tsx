@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from './app/store';
 import {useAppDispatch} from './app/hooks';
 import {addList} from './app/listsSlice';
+import DndWrapper from './components/DndWrapper';
 
 function App() {
 
@@ -21,12 +22,12 @@ function App() {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="wrapper">
+            <DndWrapper>
                 <div className="cards-container">
                     {!!lists.length && lists.map((list, index) => <Column key={list.id} list={list} index={index}/>)}
                     <EmptyCard onClick={onAddList} title="Create a new list"/>
                 </div>
-            </div>
+            </DndWrapper>
         </DndProvider>
     );
 

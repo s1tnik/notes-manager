@@ -5,7 +5,7 @@ export interface ICard {
 }
 
 export const ItemTypes = {
-    BOARD: 'board',
+    LIST: 'list',
     CARD: 'card',
 }
 
