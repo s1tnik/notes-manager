@@ -105,8 +105,6 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
                         {!!cards.length && cards.map((card, cardIndex) => <Card index={cardIndex} listIndex={index}
                                                                                 key={card.id} listId={id}
                                                                                 card={card}/>)}
-                        {/*{!hoveredCard && toList?.id === id &&*/}
-                        {/*<EmptyCard style={{height: draggableCard?.height}}/>}*/}
                         <EmptyCard onClick={onAddCard} title="+ Add new card"/>
                     </div>
                 </div>

@@ -53,6 +53,7 @@ export const listsSlice = createSlice({
                     const stateKeys = Object.keys(state);
                     const filteredKeys = stateKeys.filter(key => key !== draggableList.list.id)
 
+
                     const hoveredListIndex = filteredKeys.findIndex(key => key === hoveredList.list.id);
                     const insertIndex = hoveredList.from === "right" ? hoveredListIndex + 1 : hoveredListIndex;
 
@@ -60,11 +61,11 @@ export const listsSlice = createSlice({
 
                     const updatedState: typeof state = {};
 
-                    for (const key in filteredKeys) {
+                    for (const key of filteredKeys) {
                         updatedState[key] = state[key];
                     }
 
-                    state = updatedState;
+                    return updatedState
                 }
             }
 
