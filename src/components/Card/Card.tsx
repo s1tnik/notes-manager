@@ -22,7 +22,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
     const {id, title, description} = card;
 
     const dispatch = useAppDispatch();
-    const {hoveredCard, draggableCard, toList} = useSelector((state: RootState) => state.dragging);
+    const {hoveredCard, draggableCard, toList, fromList} = useSelector((state: RootState) => state.dragging);
 
     const cardRef = useRef<HTMLDivElement>(null);
 
@@ -47,11 +47,14 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
             const y = clientOffset.y - rect.top;
             const height = rect.height;
 
-            if (y > height / 2) {
-                dispatch(setHoveredCard({from: "bottom", card, index}))
-            } else {
-                dispatch(setHoveredCard({from: "top", card, index}))
+            if (hoveredCard?.card.id !== id) {
+                if (y > height / 2) {
+                    dispatch(setHoveredCard({from: "bottom", card, index}))
+                } else {
+                    dispatch(setHoveredCard({from: "top", card, index}))
+                }
             }
+
         },
 
     }), [cardRef.current])
@@ -59,12 +62,17 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
     useEffect(() => {
 
         if (cardRef.current && isDraggingCard) {
-            const card = {title, description, id}
-            dispatch(setDraggableCard({card, height: cardRef.current.clientHeight, index}));
-            dispatch(setFromList({id: listId, index: listIndex}));
+
+            if (fromList?.id !== listId) {
+                dispatch(setFromList({id: listId, index: listIndex}));
+            }
+
+            if (draggableCard?.card.id !== id) {
+                dispatch(setDraggableCard({card, height: cardRef.current.clientHeight, index}));
+            }
         }
 
-    }, [card, dispatch, isDraggingCard, listId, listIndex,index]);
+    }, [card, dispatch, isDraggingCard, listId, listIndex, index, draggableCard, fromList, id]);
 
 
     if (!draggableCard || draggableCard.card.id !== card.id) {

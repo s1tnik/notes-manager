@@ -47,9 +47,12 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
     const [, drop] = useDrop(() => ({
         accept: [ItemTypes.CARD, ItemTypes.LIST],
         hover: (_, monitor) => {
-            dispatch(setToList({index, id}));
 
             if (toList?.id !== id) {
+                dispatch(setToList({index, id}));
+            }
+
+            if (toList?.id !== id && !hoveredCard) {
                 dispatch(setHoveredCard(undefined));
             }
 
@@ -63,22 +66,22 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
                 const x = clientOffset.x - rect.left;
                 const width = rect.width;
 
-                if (x > width / 2) {
+                if (x > width / 2 && hoveredList?.list.id !== id) {
                     dispatch(setHoveredList({from: "right", list, index}))
                 } else {
                     dispatch(setHoveredList({from: "left", list, index}))
                 }
             }
         },
-    }), [fromList, toList, index, id, list])
+    }), [fromList, toList, index, id, list, hoveredCard])
 
     useEffect(() => {
 
-        if (columnRef.current && isDraggingList) {
+        if (columnRef.current && isDraggingList && draggableList?.list.id !== id) {
             dispatch(setDraggableList({list, height: columnRef.current.clientHeight, index}));
         }
 
-    }, [isDraggingList, dispatch, index, list]);
+    }, [isDraggingList, dispatch, index, list, draggableList, id]);
 
     const onAddCard = (): void => {
         dispatch(addCard({listId: id, card: {title: uuidv4(), id: uuidv4()}}))
