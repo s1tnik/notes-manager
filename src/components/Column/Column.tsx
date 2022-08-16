@@ -26,11 +26,8 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
 
     const dispatch = useAppDispatch();
     const {
-        toList,
         draggableList,
         hoveredList,
-        draggableCard,
-        hoveredCard
     } = useSelector((state: RootState) => state.dragging);
 
     const [{isDraggingList}, drag] = useDrag(() => ({
