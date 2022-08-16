@@ -64,7 +64,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
             dispatch(setFromList({id: listId, index: listIndex}));
         }
 
-    }, [isDraggingCard, description, dispatch, id, listId, title]);
+    }, [card, dispatch, isDraggingCard, listId, listIndex,index]);
 
 
     if (!draggableCard || draggableCard.card.id !== card.id) {
