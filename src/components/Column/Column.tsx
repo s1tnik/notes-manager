@@ -11,7 +11,7 @@ import {useDrag, useDrop} from "react-dnd";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
-import {setToList, setHoveredCard, setDraggableList, setHoveredList, resetDraggingState} from "../../app/draggingSlice";
+import {setToList, setDraggableList, setHoveredList, resetDraggingState} from "../../app/draggingSlice";
 
 interface ColumnProps {
     list: List;
@@ -26,7 +26,6 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
 
     const dispatch = useAppDispatch();
     const {
-        fromList,
         toList,
         draggableList,
         hoveredList,
@@ -48,13 +47,7 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
         accept: [ItemTypes.CARD, ItemTypes.LIST],
         hover: (_, monitor) => {
 
-            if (toList?.id !== id) {
-                dispatch(setToList({index, id}));
-            }
-
-            if (toList?.id !== id && !hoveredCard) {
-                dispatch(setHoveredCard(undefined));
-            }
+            dispatch(setToList({index, id}));
 
             const itemType = monitor.getItemType();
             const clientOffset = monitor.getClientOffset();
@@ -66,14 +59,14 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
                 const x = clientOffset.x - rect.left;
                 const width = rect.width;
 
-                if (x > width / 2 && hoveredList?.list.id !== id) {
+                if (x > width / 2) {
                     dispatch(setHoveredList({from: "right", list, index}))
                 } else {
                     dispatch(setHoveredList({from: "left", list, index}))
                 }
             }
         },
-    }), [fromList, toList, index, id, list, hoveredCard])
+    }))
 
     useEffect(() => {
 
@@ -87,6 +80,9 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
         dispatch(addCard({listId: id, card: {title: uuidv4(), id: uuidv4()}}))
     }
 
+    if (draggableList?.list.id === id && !hoveredList) {
+        return <EmptyCard style={{height: draggableList?.height}}/>
+    }
 
     if (!draggableList || draggableList.list.id !== list.id) {
 
@@ -103,8 +99,6 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
                         {!!cards.length && cards.map((card, cardIndex) => <Card index={cardIndex} listIndex={index}
                                                                                 key={card.id} listId={id}
                                                                                 card={card}/>)}
-                        {toList?.id === list.id && draggableCard && !hoveredCard &&
-                        <EmptyCard style={{height: draggableCard.height}}/>}
                         <EmptyCard onClick={onAddCard} title="+ Add new card"/>
                     </div>
                 </div>

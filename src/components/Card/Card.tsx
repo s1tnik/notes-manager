@@ -47,17 +47,15 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
             const y = clientOffset.y - rect.top;
             const height = rect.height;
 
-            if (hoveredCard?.card.id !== id) {
-                if (y > height / 2) {
-                    dispatch(setHoveredCard({from: "bottom", card, index}))
-                } else {
-                    dispatch(setHoveredCard({from: "top", card, index}))
-                }
+            if (y > height / 2) {
+                dispatch(setHoveredCard({from: "bottom", card, index}))
+            } else {
+                dispatch(setHoveredCard({from: "top", card, index}))
             }
 
         },
 
-    }), [cardRef.current])
+    }))
 
     useEffect(() => {
 
@@ -74,6 +72,10 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
     }, [card, dispatch, isDraggingCard, listId, listIndex, index, draggableCard, fromList, id]);
 
+
+    if (draggableCard?.card.id === id && !hoveredCard) {
+        return <EmptyCard style={{height: draggableCard?.height}}/>
+    }
 
     if (!draggableCard || draggableCard.card.id !== card.id) {
 

@@ -103,8 +103,7 @@ export const listsSlice = createSlice({
 
             if (fromList && toList && draggableCard) {
                 if (!hoveredCard) {
-                    state[fromList.id].cards.splice(draggableCard.index, 1);
-                    state[toList.id].cards.push(draggableCard.card);
+                    return state;
                 } else {
 
                     if (fromList.id === toList.id) {
