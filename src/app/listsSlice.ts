@@ -87,10 +87,11 @@ export const listsSlice = createSlice({
                     listId: string;
                 };
                 hoveredCard?: {
-                    card: ICard;
-                    index: number;
-                    from: "top" | "bottom"
+                    card?: ICard;
+                    index?: number;
+                    from?: "top" | "bottom"
                     listId: string;
+                    shallowCard?: boolean;
                 }
             }>) => {
                 const {draggableCard, hoveredCard} = action.payload;
@@ -103,14 +104,26 @@ export const listsSlice = createSlice({
                     if (draggableCard.listId === hoveredCard.listId) {
                         const filteredList = state[hoveredCard.listId].cards.filter(({id}) => id !== draggableCard.card.id);
 
-                        const hoveredCardIndex = filteredList.findIndex(({id}) => id === hoveredCard.card.id);
+                        if (hoveredCard.shallowCard) {
+                            filteredList.push(draggableCard.card);
+                            state[hoveredCard.listId].cards = filteredList;
+                            return;
+                        }
 
+                        const hoveredCardIndex = filteredList.findIndex(({id}) => id === hoveredCard.card?.id);
                         const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
 
                         filteredList.splice(insertIndex, 0, draggableCard.card);
                         state[hoveredCard.listId].cards = filteredList;
                     } else {
-                        const hoveredCardIndex = state[hoveredCard.listId].cards.findIndex(({id}) => id === hoveredCard.card.id);
+
+                        if (hoveredCard.shallowCard) {
+                            state[draggableCard.listId].cards.splice(draggableCard.index, 1);
+                            state[hoveredCard.listId].cards.push(draggableCard.card);
+                            return;
+                        }
+
+                        const hoveredCardIndex = state[hoveredCard.listId].cards.findIndex(({id}) => id === hoveredCard.card?.id);
                         const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
 
                         if (hoveredCardIndex === -1) {

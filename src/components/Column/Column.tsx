@@ -11,7 +11,8 @@ import {useDrag, useDrop} from "react-dnd";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
-import {setDraggableList, setHoveredList, resetDraggingState} from "../../app/draggingSlice";
+import {setDraggableList, setHoveredList, resetDraggingState, setHoveredCard} from "../../app/draggingSlice";
+import {ColumnFooter} from "./ColumnFooter";
 
 interface ColumnProps {
     list: List;
@@ -95,9 +96,8 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
                         {!!cards.length && cards.map((card, cardIndex) => <Card index={cardIndex} listIndex={index}
                                                                                 key={card.id} listId={id}
                                                                                 card={card}/>)}
-                        {/*{!hoveredCard && toList?.id === id && !draggableList && <EmptyCard style={{height: draggableCard?.height}}/>}*/}
-                        <EmptyCard onClick={onAddCard} title="+ Add new card"/>
                     </div>
+                    <ColumnFooter listId={id} onClick={onAddCard}/>
                 </div>
 
                 {renderShallowList && hoveredList?.from === "right" &&

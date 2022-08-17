@@ -72,7 +72,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
     if (!draggableCard || draggableCard.card.id !== card.id) {
 
-        const renderShallowCard = !!hoveredCard && id === hoveredCard.card.id;
+        const renderShallowCard = !!hoveredCard && id === hoveredCard.card?.id;
 
         return (
             <>

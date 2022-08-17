@@ -1,5 +1,8 @@
 .wrapper {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
   & :global {
     .column {
@@ -21,4 +24,11 @@
   padding: 14px 20px;
   font-size: 18px;
   font-weight: 400;
+}
+
+.columnFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
 }

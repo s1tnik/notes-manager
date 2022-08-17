@@ -2,7 +2,7 @@ import React from "react";
 import {useDrop} from "react-dnd";
 import {useSelector} from "react-redux";
 import {useAppDispatch} from "../../app/hooks";
-import {insertCard, insertList} from "../../app/listsSlice";
+import {insertCard, insertList, addCard} from "../../app/listsSlice";
 import {RootState} from "../../app/store";
 import {ItemTypes} from "../../types";
 

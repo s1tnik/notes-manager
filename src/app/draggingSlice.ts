@@ -9,10 +9,11 @@ export interface DraggingState {
         listId: string;
     };
     hoveredCard?: {
-        card: ICard;
-        from: "top" | "bottom"
-        index: number;
+        card?: ICard;
+        from?: "top" | "bottom"
+        index?: number;
         listId: string;
+        shallowCard?: boolean;
     }
 
     draggableList?: {
