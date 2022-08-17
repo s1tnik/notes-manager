@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef} from "react";
 import styles from "./styles.module.scss"
 import {useDrag, useDrop} from 'react-dnd'
 import {ICard, ItemTypes} from '../../types/index'
 import {useAppDispatch} from "../../app/hooks";
-import {setFromList, setDraggableCard, setHoveredCard, resetDraggingState} from "../../app/draggingSlice"
+import {setDraggableCard, setHoveredCard, resetDraggingState} from "../../app/draggingSlice"
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
@@ -22,7 +22,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
     const {id, title, description} = card;
 
     const dispatch = useAppDispatch();
-    const {hoveredCard, draggableCard, toList, fromList} = useSelector((state: RootState) => state.dragging);
+    const {hoveredCard, draggableCard} = useSelector((state: RootState) => state.dragging);
 
     const cardRef = useRef<HTMLDivElement>(null);
 
@@ -48,9 +48,9 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
             const height = rect.height;
 
             if (y > height / 2) {
-                dispatch(setHoveredCard({from: "bottom", card, index}))
+                dispatch(setHoveredCard({from: "bottom", card, index, listId}))
             } else {
-                dispatch(setHoveredCard({from: "top", card, index}))
+                dispatch(setHoveredCard({from: "top", card, index, listId}))
             }
 
         },
@@ -59,18 +59,11 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
     useEffect(() => {
 
-        if (cardRef.current && isDraggingCard) {
-
-            if (fromList?.id !== listId) {
-                dispatch(setFromList({id: listId, index: listIndex}));
-            }
-
-            if (draggableCard?.card.id !== id) {
-                dispatch(setDraggableCard({card, height: cardRef.current.clientHeight, index}));
-            }
+        if (draggableCard?.card.id !== id && cardRef.current && isDraggingCard) {
+            dispatch(setDraggableCard({card, height: cardRef.current.clientHeight, index, listId}));
         }
 
-    }, [card, dispatch, isDraggingCard, listId, listIndex, index, draggableCard, fromList, id]);
+    }, [card, dispatch, isDraggingCard, listId, listIndex, index, draggableCard, id]);
 
 
     if (draggableCard?.card.id === id && !hoveredCard) {

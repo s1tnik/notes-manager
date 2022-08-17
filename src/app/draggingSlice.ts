@@ -6,11 +6,13 @@ export interface DraggingState {
         card: ICard;
         height: number;
         index: number;
+        listId: string;
     };
     hoveredCard?: {
         card: ICard;
         from: "top" | "bottom"
         index: number;
+        listId: string;
     }
 
     draggableList?: {
@@ -23,15 +25,6 @@ export interface DraggingState {
         from: "left" | "right"
         index: number;
     }
-
-    fromList?: {
-        index: number;
-        id: string;
-    };
-    toList?: {
-        index: number;
-        id: string;
-    }
 }
 
 const initialState: DraggingState = {};
@@ -39,12 +32,6 @@ export const draggingSlice = createSlice({
     name: 'draggable card',
     initialState,
     reducers: {
-        setFromList: (state, action: PayloadAction<DraggingState['fromList']>) => {
-            state.fromList = action.payload;
-        },
-        setToList: (state, action: PayloadAction<DraggingState['toList']>) => {
-            state.toList = action.payload;
-        },
         setDraggableCard: (state, action: PayloadAction<DraggingState['draggableCard']>) => {
             state.draggableCard = action.payload;
         },
@@ -64,8 +51,6 @@ export const draggingSlice = createSlice({
 });
 
 export const {
-    setFromList,
-    setToList,
     setDraggableCard,
     setHoveredCard,
     resetDraggingState,

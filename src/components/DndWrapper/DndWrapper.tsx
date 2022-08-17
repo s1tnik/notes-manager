@@ -14,8 +14,6 @@ export const DndWrapper: React.FC<DndWrapperProps> = ({children}) => {
 
     const dispatch = useAppDispatch();
     const {
-        fromList,
-        toList,
         draggableCard,
         hoveredCard,
         draggableList,
@@ -28,14 +26,14 @@ export const DndWrapper: React.FC<DndWrapperProps> = ({children}) => {
             const itemType = monitor.getItemType();
 
             if (itemType === ItemTypes.CARD) {
-                dispatch(insertCard({fromList, toList, draggableCard, hoveredCard}))
+                dispatch(insertCard({draggableCard, hoveredCard}))
             }
 
             if (itemType === ItemTypes.LIST) {
                 dispatch(insertList({hoveredList, draggableList}))
             }
         },
-    }), [fromList, toList, draggableCard, hoveredCard, hoveredList, draggableList])
+    }), [draggableCard, hoveredCard, hoveredList, draggableList])
 
     return (
         <div ref={drop} className="wrapper">{children}</div>

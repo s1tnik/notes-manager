@@ -22,34 +22,36 @@ const initialState: ListsState = {};
 // );
 
 export const listsSlice = createSlice({
-    name: 'lists',
-    initialState,
-    reducers: {
-        addList: (state, action: PayloadAction<List>) => {
-            const {id, ...list} = action.payload;
-            state[id] = list;
-        },
-        removeList: (state, action: PayloadAction<string>) => {
-            delete state[action.payload]
-        },
-        insertList: (state, action: PayloadAction<{
-            draggableList?: {
-                list: List;
-                index: number;
-            };
-            hoveredList?: {
-                list: List;
-                index: number;
-                from: "left" | "right"
-            }
-        }>) => {
-            const {draggableList, hoveredList} = action.payload
-
-            if (draggableList) {
+        name: 'lists',
+        initialState,
+        reducers: {
+            addList: (state, action: PayloadAction<List>) => {
+                const {id, ...list} = action.payload;
+                state[id] = list;
+            },
+            removeList: (state, action: PayloadAction<string>) => {
+                delete state[action.payload]
+            },
+            insertList: (state, action: PayloadAction<{
+                draggableList?: {
+                    list: List;
+                    index: number;
+                };
+                hoveredList?: {
+                    list: List;
+                    index: number;
+                    from: "left" | "right"
+                }
+            }>) => {
+                const {draggableList, hoveredList} = action.payload
 
                 if (!hoveredList) {
                     return state;
-                } else {
+                }
+
+                if (draggableList) {
+
+
                     const stateKeys = Object.keys(state);
                     const filteredKeys = stateKeys.filter(key => key !== draggableList.list.id)
 
@@ -67,82 +69,78 @@ export const listsSlice = createSlice({
 
                     return updatedState
                 }
-            }
+            },
 
+            addCard: (state, action: PayloadAction<{ listId: string, card: ICard }>) => {
+                const {listId, card} = action.payload
+                state[listId].cards.push(card)
+            },
+            removeCard: (state, action: PayloadAction<{ listId: string, card: ICard }>) => {
+                const {listId, card} = action.payload
+                const filteredCards = state[listId].cards.filter(({id}) => id !== card.id)
+                state[listId].cards = filteredCards;
+            },
+            insertCard: (state, action: PayloadAction<{
+                draggableCard?: {
+                    card: ICard;
+                    index: number;
+                    listId: string;
+                };
+                hoveredCard?: {
+                    card: ICard;
+                    index: number;
+                    from: "top" | "bottom"
+                    listId: string;
+                }
+            }>) => {
+                const {draggableCard, hoveredCard} = action.payload;
 
-        },
-        addCard: (state, action: PayloadAction<{ listId: string, card: ICard }>) => {
-            const {listId, card} = action.payload
-            state[listId].cards.push(card)
-        },
-        removeCard: (state, action: PayloadAction<{ listId: string, card: ICard }>) => {
-            const {listId, card} = action.payload
-            const filteredCards = state[listId].cards.filter(({id}) => id !== card.id)
-            state[listId].cards = filteredCards;
-        },
-        insertCard: (state, action: PayloadAction<{
-            fromList?: {
-                id: string;
-                index: number;
-            };
-            toList?: {
-                id: string;
-                index: number;
-            };
-            draggableCard?: {
-                card: ICard;
-                index: number;
-            };
-            hoveredCard?: {
-                card: ICard;
-                index: number;
-                from: "top" | "bottom"
-            }
-        }>) => {
-            const {fromList, toList, draggableCard, hoveredCard} = action.payload;
-
-            if (fromList && toList && draggableCard) {
                 if (!hoveredCard) {
-                    state[fromList.id].cards.splice(draggableCard.index, 1);
-                    state[toList.id].cards.push(draggableCard.card)
-                } else {
+                    return state;
+                }
 
-                    if (fromList.id === toList.id) {
-                        const filteredList = state[toList.id].cards.filter(({id}) => id !== draggableCard.card.id);
+                if (draggableCard) {
+                    if (draggableCard.listId === hoveredCard.listId) {
+                        const filteredList = state[hoveredCard.listId].cards.filter(({id}) => id !== draggableCard.card.id);
 
                         const hoveredCardIndex = filteredList.findIndex(({id}) => id === hoveredCard.card.id);
+
                         const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
 
                         filteredList.splice(insertIndex, 0, draggableCard.card);
-                        state[toList.id].cards = filteredList;
+                        state[hoveredCard.listId].cards = filteredList;
                     } else {
-                        const hoveredCardIndex = state[toList.id].cards.findIndex(({id}) => id === hoveredCard.card.id);
+                        const hoveredCardIndex = state[hoveredCard.listId].cards.findIndex(({id}) => id === hoveredCard.card.id);
                         const insertIndex = hoveredCard.from === "bottom" ? hoveredCardIndex + 1 : hoveredCardIndex;
 
-                        state[fromList.id].cards.splice(draggableCard.index, 1);
-                        state[toList.id].cards.splice(insertIndex, 0, draggableCard.card)
+                        if (hoveredCardIndex === -1) {
+                            return state;
+                        }
+
+                        state[draggableCard.listId].cards.splice(draggableCard.index, 1);
+                        state[hoveredCard.listId].cards.splice(insertIndex, 0, draggableCard.card)
                     }
 
                 }
             }
-        }
-    },
-    // The `extraReducers` field lets the slice handle actions defined elsewhere,
-    // including actions generated by createAsyncThunk or in other slices.
-    // extraReducers: (builder) => {
-    //   builder
-    //     .addCase(incrementAsync.pending, (state) => {
-    //       state.status = 'loading';
-    //     })
-    //     .addCase(incrementAsync.fulfilled, (state, action) => {
-    //       state.status = 'idle';
-    //       state.value += action.payload;
-    //     })
-    //     .addCase(incrementAsync.rejected, (state) => {
-    //       state.status = 'failed';
-    //     });
-    // },
-});
+        },
+// The `extraReducers` field lets the slice handle actions defined elsewhere,
+// including actions generated by createAsyncThunk or in other slices.
+// extraReducers: (builder) => {
+//   builder
+//     .addCase(incrementAsync.pending, (state) => {
+//       state.status = 'loading';
+//     })
+//     .addCase(incrementAsync.fulfilled, (state, action) => {
+//       state.status = 'idle';
+//       state.value += action.payload;
+//     })
+//     .addCase(incrementAsync.rejected, (state) => {
+//       state.status = 'failed';
+//     });
+// },
+    })
+;
 
 export const {addList, removeList, addCard, removeCard, insertCard, insertList} = listsSlice.actions;
 
