@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styles from "./styles.module.scss"
 import {useDrag, useDrop} from 'react-dnd'
 import {ICard, ItemTypes} from '../../types/index'
@@ -79,7 +79,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
     if (!draggableCard || draggableCard.card.id !== card.id) {
 
-        const renderShallowCard = !!hoveredCard && id === hoveredCard.card.id && toList?.id === listId;
+        const renderShallowCard = !!hoveredCard && id === hoveredCard.card.id;
 
         return (
             <>
