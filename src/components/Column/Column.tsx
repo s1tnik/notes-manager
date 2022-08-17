@@ -11,7 +11,7 @@ import {useDrag, useDrop} from "react-dnd";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
-import {setToList, setDraggableList, setHoveredList, resetDraggingState} from "../../app/draggingSlice";
+import {setToList, setDraggableList, setHoveredList, resetDraggingState, setHoveredCard} from "../../app/draggingSlice";
 
 interface ColumnProps {
     list: List;
@@ -28,6 +28,9 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
     const {
         draggableList,
         hoveredList,
+        hoveredCard,
+        toList,
+        draggableCard
     } = useSelector((state: RootState) => state.dragging);
 
     const [{isDraggingList}, drag] = useDrag(() => ({
@@ -47,12 +50,21 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
             dispatch(setToList({index, id}));
 
             const itemType = monitor.getItemType();
+
             const clientOffset = monitor.getClientOffset();
+            if (!clientOffset || !columnRef.current) return;
 
-            if (!clientOffset) return;
+            const rect = columnRef.current.getBoundingClientRect();
+            if (itemType === ItemTypes.CARD) {
+                const y = clientOffset.y - rect.bottom;
 
-            if (itemType === ItemTypes.LIST && columnRef.current) {
-                const rect = columnRef.current.getBoundingClientRect();
+                if (y > -86) {
+                    dispatch(setHoveredCard(undefined))
+                }
+
+            }
+
+            if (itemType === ItemTypes.LIST) {
                 const x = clientOffset.x - rect.left;
                 const width = rect.width;
 
@@ -96,6 +108,7 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
                         {!!cards.length && cards.map((card, cardIndex) => <Card index={cardIndex} listIndex={index}
                                                                                 key={card.id} listId={id}
                                                                                 card={card}/>)}
+                        {!hoveredCard && toList?.id === id && !draggableList && <EmptyCard style={{height: draggableCard?.height}}/>}
                         <EmptyCard onClick={onAddCard} title="+ Add new card"/>
                     </div>
                 </div>
