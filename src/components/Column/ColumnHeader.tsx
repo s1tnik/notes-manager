@@ -111,7 +111,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                                     <span onClick={close}><AiOutlineClose/></span>
                                 </div>
                                 <div className="text-area">
-                                    <p>Are you sure you want to delete {list.name} list?</p>
+                                    <p>Are you sure you want to delete "{list.name}" list?</p>
                                     <button onClick={handleClickOnDeleteList}>
                                         Delete list
                                     </button>

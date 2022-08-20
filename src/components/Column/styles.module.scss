@@ -21,13 +21,14 @@
   background-color: #F4F4F4;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   padding: 14px 20px;
   font-size: 16px;
   font-weight: 400;
   gap: 10px;
 
   > button {
+    align-self: flex-start;
     font-size: 24px;
     cursor: pointer;
   }

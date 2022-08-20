@@ -42,6 +42,11 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCa
         setTextAreaValue(e.target.value);
     }
 
+    const handleOnCloseClick = () => {
+        setIsAddingCard(false);
+        setTextAreaValue("");
+    }
+
     return (
         <div ref={drop} className={styles.columnFooter}>
             {hoveredCard?.listId === listId && hoveredCard?.shallowCard &&
@@ -51,7 +56,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCa
                     <textarea autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
                     <div className="actions">
                         <button disabled={!textAreaValue} onClick={onAddCard}>Add card</button>
-                        <button onClick={() => setIsAddingCard(false)}><AiOutlineClose/></button>
+                        <button onClick={handleOnCloseClick}><AiOutlineClose/></button>
                     </div>
                 </div>
                 : <EmptyCard onClick={() => setIsAddingCard(true)} title="+ Add new card"/>}
