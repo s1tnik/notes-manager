@@ -1,36 +1,62 @@
-import React from "react"
+import React, {Dispatch, SetStateAction, useState} from "react"
+import {AiOutlineClose} from "react-icons/ai";
 import {useDrop} from "react-dnd"
 import {useSelector} from "react-redux"
-import { setHoveredCard } from "../../app/draggingSlice"
-import { useAppDispatch } from "../../app/hooks"
+import {v4 as uuidv4} from 'uuid';
+import {setHoveredCard} from "../../app/draggingSlice"
+import {useAppDispatch} from "../../app/hooks"
+import {addCard} from "../../app/listsSlice";
 import {RootState} from "../../app/store"
 import {ItemTypes} from "../../types"
 import EmptyCard from "../EmptyCard"
 import styles from "./styles.module.scss"
 
 interface ColumnFooterProps {
-    onClick: () => void;
     listId: string;
+    setIsAddingCard: Dispatch<SetStateAction<boolean>>;
+    isAddingCard: boolean;
 }
 
-export const ColumnFooter: React.FC<ColumnFooterProps> = ({onClick, listId}) => {
+export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCard, isAddingCard}) => {
 
     const {hoveredCard, draggableCard} = useSelector((state: RootState) => (state.dragging));
 
     const dispatch = useAppDispatch();
 
+    const [textAreaValue, setTextAreaValue] = useState("");
+
     const [, drop] = useDrop(() => ({
         accept: ItemTypes.CARD,
         hover: (_, monitor) => {
-            dispatch(setHoveredCard({shallowCard: true, listId }))
+            dispatch(setHoveredCard({shallowCard: true, listId}))
         }
     }))
 
+    const onAddCard = (): void => {
+        dispatch(addCard({listId, card: {title: textAreaValue, id: uuidv4()}}))
+        setIsAddingCard(false);
+        setTextAreaValue("");
+    }
+
+    const handleOnTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setTextAreaValue(e.target.value);
+    }
 
     return (
         <div ref={drop} className={styles.columnFooter}>
-            {hoveredCard?.listId === listId && hoveredCard?.shallowCard && <EmptyCard style={{height: draggableCard?.height}}/>}
-            <EmptyCard onClick={onClick} title="+ Add new card"/>
+            {hoveredCard?.listId === listId && hoveredCard?.shallowCard &&
+            <EmptyCard style={{height: draggableCard?.height}}/>}
+            {isAddingCard ?
+                <div className="add-card-container">
+                    <textarea autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
+                    <div className="actions">
+                        <button disabled={!textAreaValue} onClick={onAddCard}>Add card</button>
+                        <button onClick={() => setIsAddingCard(false)}><AiOutlineClose/></button>
+                    </div>
+                </div>
+                : <EmptyCard onClick={() => setIsAddingCard(true)} title="+ Add new card"/>}
         </div>
     )
 }
+
+

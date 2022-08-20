@@ -1,7 +1,5 @@
-import React, {useEffect, useRef} from "react"
+import React, {useEffect, useRef, useState} from "react"
 import {useAppDispatch} from "../../app/hooks"
-import {v4 as uuidv4} from 'uuid';
-import {addCard} from "../../app/listsSlice"
 import {ItemTypes, List} from "../../types"
 import Card from "../Card"
 import EmptyCard from "../EmptyCard"
@@ -11,7 +9,7 @@ import {useDrag, useDrop} from "react-dnd";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
-import {setDraggableList, setHoveredList, resetDraggingState, setHoveredCard} from "../../app/draggingSlice";
+import {setDraggableList, setHoveredList, resetDraggingState} from "../../app/draggingSlice";
 import {ColumnFooter} from "./ColumnFooter";
 
 interface ColumnProps {
@@ -24,6 +22,7 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
     const {cards, id, name} = list;
 
     const columnRef = useRef<HTMLDivElement>(null);
+    const [isAddingCard, setIsAddingCard] = useState(false);
 
     const dispatch = useAppDispatch();
     const {
@@ -73,9 +72,6 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
 
     }, [isDraggingList, dispatch, index, list, draggableList, id]);
 
-    const onAddCard = (): void => {
-        dispatch(addCard({listId: id, card: {title: uuidv4(), id: uuidv4()}}))
-    }
 
     if (draggableList?.list.id === id && !hoveredList) {
         return <EmptyCard style={{height: draggableList?.height}}/>
@@ -92,12 +88,12 @@ export const Column: React.FC<ColumnProps> = ({list, index}) => {
 
                 <div ref={drop} className={styles.wrapper}>
                     <div ref={mergeRefs([drag, columnRef])} className="column">
-                        <ColumnHeader header={name}/>
+                        <ColumnHeader setIsAddingCard={setIsAddingCard} listId={id} header={name}/>
                         {!!cards.length && cards.map((card, cardIndex) => <Card index={cardIndex} listIndex={index}
                                                                                 key={card.id} listId={id}
                                                                                 card={card}/>)}
                     </div>
-                    <ColumnFooter listId={id} onClick={onAddCard}/>
+                    <ColumnFooter isAddingCard={isAddingCard} setIsAddingCard={setIsAddingCard} listId={id}/>
                 </div>
 
                 {renderShallowList && hoveredList?.from === "right" &&
