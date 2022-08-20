@@ -80,6 +80,11 @@ export const listsSlice = createSlice({
                 const filteredCards = state[listId].cards.filter(({id}) => id !== card.id)
                 state[listId].cards = filteredCards;
             },
+            changeCard: (state, action: PayloadAction<{ listId: string, cardIndex: number, cardData: Omit<ICard, "id"> }>) => {
+                const {listId, cardData, cardIndex} = action.payload
+                const card = state[listId].cards[cardIndex];
+                state[listId].cards[cardIndex] = {...card, ...cardData}
+            },
             insertCard: (state, action: PayloadAction<{
                 draggableCard?: {
                     card: ICard;
@@ -155,7 +160,7 @@ export const listsSlice = createSlice({
     })
 ;
 
-export const {addList, removeList, addCard, removeCard, insertCard, insertList} = listsSlice.actions;
+export const {addList, removeList, addCard, removeCard, insertCard, insertList, changeCard} = listsSlice.actions;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
