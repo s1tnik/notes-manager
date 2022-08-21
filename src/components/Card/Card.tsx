@@ -9,7 +9,7 @@ import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
 import EmptyCard from "../EmptyCard";
 import Popup from "reactjs-popup";
-import {AiFillEdit, AiOutlineAlignLeft, AiOutlineClose} from "react-icons/ai";
+import {AiOutlineClose, AiOutlineEllipsis} from "react-icons/ai";
 import {changeCard} from "../../app/listsSlice";
 
 interface CardProps {
@@ -113,39 +113,39 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                             handleSaveDescription();
                         }
                     }} className={styles.modal}>
-                        <div>
-                            <div className="title-container">
-                                <span><AiFillEdit/></span>
-                                <div>
-                                    <input autoFocus className={!cardValues.title ? styles.focus : ""}
-                                           onChange={(e) => handleCardValueChange(e, "title")} value={cardValues.title}
-                                           type="text"/>
-                                    <p>In list "{list.name}"</p>
-                                </div>
+                        <div className="title-container">
+                            <div className="input-container">
+                                <input autoFocus className={!cardValues.title ? styles.focus : ""}
+                                       onChange={(e) => handleCardValueChange(e, "title")} value={cardValues.title}
+                                       type="text"/>
+                                <span onClick={closeModal}><AiOutlineClose/></span>
                             </div>
+                            <p>In list "{list.name}"</p>
+                        </div>
+                        <div className="description-and-actions">
                             <div className="description-container">
-                                <span><AiOutlineAlignLeft/></span>
                                 <div>
-                                    <div>
-                                        <h2>Description</h2>
-                                        {!isEditingDescription &&
-                                        <button onClick={() => setIsEditingDescription(true)}>Edit</button>}
-                                    </div>
-                                    {isEditingDescription ? <div className="text-area">
+                                    <h2>Description</h2>
+                                    {!isEditingDescription &&
+                                    <button onClick={() => setIsEditingDescription(true)}>Edit</button>}
+                                </div>
+                                {isEditingDescription ? <div className="text-area">
                                             <textarea onChange={(e) => handleCardValueChange(e, "description")}
                                                       autoFocus
                                                       value={cardValues.description}/>
-                                            <div>
-                                                <button onClick={handleSaveDescription}>Save</button>
-                                                <button onClick={handleCancelDescription}>Cancel</button>
-                                            </div>
-                                        </div> :
-                                        <p onClick={() => setIsEditingDescription(true)}>{cardValues.description}</p>
-                                    }
-                                </div>
+                                        <div>
+                                            <button onClick={handleSaveDescription}>Save</button>
+                                            <button onClick={handleCancelDescription}>Cancel</button>
+                                        </div>
+                                    </div> :
+                                    <p onClick={() => setIsEditingDescription(true)}>{cardValues.description}</p>
+                                }
+                            </div>
+                            <div className="actions">
+                                <h2>Actions</h2>
+                                <button>Delete</button>
                             </div>
                         </div>
-                        <span onClick={closeModal}><AiOutlineClose/></span>
                     </div>
                 </Popup>
                 {renderShallowCard && hoveredCard?.from === "top" &&
@@ -153,7 +153,8 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
                 <div onClick={() => setOpen(o => !o)} ref={mergeRefs([drag, drop, cardRef])} className={styles.card}>
                     <p className="title">{title}</p>
-                    {description && <span><AiOutlineAlignLeft/></span>}
+                    {description && <p className="description">{description.length > 150 ? <>{description.slice(0, 150)}
+                        <AiOutlineEllipsis/></> : description}</p>}
                 </div>
 
                 {renderShallowCard && hoveredCard?.from === "bottom" &&

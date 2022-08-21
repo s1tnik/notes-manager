@@ -34,6 +34,13 @@ function App() {
         setTextAreaValue("");
     }
 
+    const handleOnBlur = () => {
+        if (!textAreaValue) {
+            handleOnCloseClick();
+        }
+    }
+
+
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -42,7 +49,7 @@ function App() {
                     {!!lists.length && lists.map((list, index) => <Column key={list.id} list={list} index={index}/>)}
                     {isAddingColumn ?
                         <div className="add-card-container">
-                            <textarea autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
+                            <textarea onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
                             <div className="actions">
                                 <button disabled={!textAreaValue} onClick={onAddList}>Add list</button>
                                 <button onClick={handleOnCloseClick}><AiOutlineClose/></button>
