@@ -19,7 +19,6 @@ function App() {
     const [textAreaValue, setTextAreaValue] = useState("");
     const [isAddingColumn, setIsAddingColumn] = useState(false);
 
-
     const onAddList = (): void => {
         dispatch(addList({id: uuidv4(), cards: [], name: textAreaValue}))
         setIsAddingColumn(false);

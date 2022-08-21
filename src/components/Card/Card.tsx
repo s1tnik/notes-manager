@@ -34,9 +34,21 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
     const [cardValues, setCardValues] = useState({title: card.title, description: card.description});
 
+    const [isEditingDescription, setIsEditingDescription] = useState(false);
+
     const handleCardValueChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, type: "title" | 'description') => {
         setCardValues(prev => ({...prev, [type]: e.target.value}))
     }
+
+    const handleSaveDescription = () => {
+        setIsEditingDescription(false)
+    }
+
+    const handleCancelDescription = () => {
+        setIsEditingDescription(false);
+        setCardValues(prev => ({...prev, description: card.description}))
+    }
+
 
     const [open, setOpen] = useState(false);
     const closeModal = () => {
@@ -96,7 +108,11 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
         return (
             <>
                 <Popup open={open} closeOnDocumentClick={!!cardValues.title} onClose={closeModal}>
-                    <div className={styles.modal}>
+                    <div onClick={(e) => {
+                        if (!(e.target as Element).closest(".text-area") && isEditingDescription) {
+                            handleSaveDescription();
+                        }
+                    }} className={styles.modal}>
                         <div>
                             <div className="title-container">
                                 <span><AiFillEdit/></span>
@@ -110,8 +126,22 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                             <div className="description-container">
                                 <span><AiOutlineAlignLeft/></span>
                                 <div>
-                                    <input onChange={(e) => handleCardValueChange(e, "description")}
-                                           value={cardValues.description} type="text"/>
+                                    <div>
+                                        <h2>Description</h2>
+                                        {!isEditingDescription &&
+                                        <button onClick={() => setIsEditingDescription(true)}>Edit</button>}
+                                    </div>
+                                    {isEditingDescription ? <div className="text-area">
+                                            <textarea onChange={(e) => handleCardValueChange(e, "description")}
+                                                      autoFocus
+                                                      value={cardValues.description}/>
+                                            <div>
+                                                <button onClick={handleSaveDescription}>Save</button>
+                                                <button onClick={handleCancelDescription}>Cancel</button>
+                                            </div>
+                                        </div> :
+                                        <p onClick={() => setIsEditingDescription(true)}>{cardValues.description}</p>
+                                    }
                                 </div>
                             </div>
                         </div>
