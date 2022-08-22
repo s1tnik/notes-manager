@@ -12,7 +12,6 @@ import DndWrapper from './components/DndWrapper';
 import {AiOutlineClose} from 'react-icons/ai';
 import Ad from './components/Ad';
 import {fetchAdById, resetAd, resetadvertisementState } from './app/advertisement';
-import useTheme from './hooks/useTheme';
 
 function App() {
 
@@ -23,8 +22,6 @@ function App() {
 
     const [textAreaValue, setTextAreaValue] = useState("");
     const [isAddingColumn, setIsAddingColumn] = useState(false);
-
-    const theme = useTheme();
 
     useEffect(() => {
 

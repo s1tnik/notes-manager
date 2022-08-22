@@ -7,11 +7,6 @@ $light: #F6F6F6;
   &-dark {
     background-color: $dark;
     color: $light;
-
-    &.light {
-      background-color: $light;
-      color: $dark;
-    }
   }
 
   &-primary {
@@ -27,11 +22,6 @@ $light: #F6F6F6;
   &-light {
     background-color: $light;
     color: $dark;
-
-    &.dark {
-      background-color: $dark;
-      color: $light;
-    }
   }
 }
 
@@ -39,18 +29,10 @@ $light: #F6F6F6;
 
   &-dark {
     color: $dark;
-
-    &.light {
-      color: $light;
-    }
   }
 
   &-light {
     color: $light;
-
-    &.dark {
-      color: $dark;
-    }
   }
 
   &-primary {

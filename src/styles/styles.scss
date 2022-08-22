@@ -42,12 +42,12 @@ textarea, input {
     }
   }
 
-  &.light {
+  &-light {
     background-color: colors.$secondary;
     color: colors.$dark;
   }
 
-  &.dark {
+  &-dark {
     background-color: colors.$primary;
     color: colors.$light;
   }
