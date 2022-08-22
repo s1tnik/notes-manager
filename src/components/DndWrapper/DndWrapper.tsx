@@ -36,6 +36,6 @@ export const DndWrapper: React.FC<DndWrapperProps> = ({children}) => {
     }), [draggableCard, hoveredCard, hoveredList, draggableList])
 
     return (
-        <div ref={drop} className="wrapper">{children}</div>
+        <div ref={drop} className="dnd-wrapper p-xl">{children}</div>
     )
 }

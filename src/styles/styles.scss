@@ -1,22 +1,79 @@
 @use "reset";
+@use "colors";
+@use "spacing";
+@use "typography";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 body {
   font-family: 'Poppins', sans-serif;
 }
 
-.wrapper {
-  padding: 20px;
-  min-height: 100vh;
+textarea, input {
+  padding: spacing.$sm;
+  border-radius: 5px;
+  width: 100%;
+  &:focus {
+    box-shadow: 0 0 9px 1px colors.$primary;
+  }
+}
+
+
+.focus {
+  box-shadow: 0 0 9px 1px colors.$primary;
+}
+
+.btn {
+  cursor: pointer;
+  padding: spacing.$sm spacing.$md;
+  border-radius: spacing.$sm;
+  border: none;
+  background-color: colors.$primary;
+  color: colors.$light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-transparent {
+    background-color: transparent;
+    color: colors.$dark;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &.light {
+    background-color: colors.$secondary;
+    color: colors.$dark;
+  }
+
+  &.dark {
+    background-color: colors.$primary;
+    color: colors.$light;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+}
+
+
+
+
+.dnd-wrapper {
   overflow-y: visible;
   overflow-x: scroll;
   display: flex;
+  height: 100vh;
 }
 
 .cards-container {
   flex: 1;
   display: flex;
-  gap: 30px;
+  gap: spacing.$xl;
+  flex-wrap: unset;
+
 
   > div {
     width: max(300px, 20vw);
@@ -28,40 +85,13 @@ body {
   background-color: rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 10px;
+  gap: spacing.$lg;
   height: max-content;
-
-  textarea {
-    background-color: white;
-    border-radius: 5px;
-    padding: 8px;
-  }
 
   .actions {
     display: flex;
     align-items: center;
-    gap: 10px;
-
-    > button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-
-      &:first-child {
-        padding: 5px 10px;
-        color: #FFF;
-        border-radius: 5px;
-        border: none;
-        background-color: cadetblue;
-        width: max-content;
-
-        &:disabled {
-          cursor: not-allowed;
-        }
-      }
-    }
+    gap: spacing.$md;
   }
 }
 
@@ -84,4 +114,21 @@ body {
 }
 [data-popup='tooltip'].popup-overlay {
   background: transparent;
+}
+
+.loader {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.loader:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #cef;
+  border-color: #cef transparent #cef transparent;
+  animation: loader 1.2s linear infinite;
 }

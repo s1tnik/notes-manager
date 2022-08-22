@@ -58,11 +58,11 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCa
             {hoveredCard?.listId === listId && hoveredCard?.shallowCard &&
             <EmptyCard style={{height: draggableCard?.height}}/>}
             {isAddingCard ?
-                <div className="add-card-container">
+                <div className="add-card-container p-md">
                     <textarea onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
                     <div className="actions">
-                        <button disabled={!textAreaValue} onClick={onAddCard}>Add card</button>
-                        <button onClick={handleOnCloseClick}><AiOutlineClose/></button>
+                        <button className="btn" disabled={!textAreaValue} onClick={onAddCard}>Add card</button>
+                        <button className="btn btn-transparent" onClick={handleOnCloseClick}><AiOutlineClose/></button>
                     </div>
                 </div>
                 : <EmptyCard onClick={() => setIsAddingCard(true)} title="+ Add new card"/>}

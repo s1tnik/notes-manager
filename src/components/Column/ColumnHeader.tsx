@@ -59,7 +59,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
     }
 
     return (
-        <div className={styles.columnHeader}>
+        <div className={`${styles.columnHeader} bg-primary p-xl`}>
             {header}
             <Popup
                 trigger={<button><AiOutlineEllipsis/></button>}
@@ -73,46 +73,46 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                 {close => (
                     <>
                         {currentAction === ActionsEnum.INITIAL && (
-                            <div className={styles.menu}>
-                                <div className="menu-item">
+                            <div className={`${styles.menu} bg-light`}>
+                                <div className="menu-item p-md">
                                     <span/>
                                     <p>List actions</p>
                                     <span onClick={close}><AiOutlineClose/></span>
                                 </div>
-                                <div onClick={() => handleClickOnAddCard(close)} className="menu-item">Add card</div>
-                                <div onClick={() => setCurrentAction(ActionsEnum.COPY_LIST)} className="menu-item">Copy
+                                <div onClick={() => handleClickOnAddCard(close)} className="menu-item p-md">Add card</div>
+                                <div onClick={() => setCurrentAction(ActionsEnum.COPY_LIST)} className="menu-item p-md">Copy
                                     list
                                 </div>
                                 <div onClick={() => setCurrentAction(ActionsEnum.DELETE_LIST)}
-                                     className="menu-item">Delete list
+                                     className="menu-item p-md">Delete list
                                 </div>
                             </div>
                         )}
                         {currentAction === ActionsEnum.COPY_LIST && (
-                            <div className={styles.menu}>
-                                <div className="menu-item">
+                            <div className={`${styles.menu} bg-light`}>
+                                <div className="menu-item p-md">
                                     <span onClick={() => setCurrentAction(ActionsEnum.INITIAL)}><AiOutlineLeft/></span>
                                     <p>Copy list</p>
                                     <span onClick={close}><AiOutlineClose/></span>
                                 </div>
-                                <div className="text-area">
-                                    <textarea onChange={handleOnTextAreaChange} value={textAreaValue}/>
-                                    <button disabled={!textAreaValue} onClick={() => handleClickOnCopyList(close)}>Copy
+                                <div className="text-area p-md">
+                                    <textarea className="focus" autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
+                                    <button className="btn" disabled={!textAreaValue} onClick={() => handleClickOnCopyList(close)}>Copy
                                         list
                                     </button>
                                 </div>
                             </div>
                         )}
                         {currentAction === ActionsEnum.DELETE_LIST && (
-                            <div className={styles.menu}>
-                                <div className="menu-item">
+                            <div className={`${styles.menu} bg-light`}>
+                                <div className="menu-item p-md">
                                     <span onClick={() => setCurrentAction(ActionsEnum.INITIAL)}><AiOutlineLeft/></span>
                                     <p>Delete list</p>
                                     <span onClick={close}><AiOutlineClose/></span>
                                 </div>
-                                <div className="text-area">
+                                <div className="text-area p-md">
                                     <p>Are you sure you want to delete "{list.name}" list?</p>
-                                    <button onClick={handleClickOnDeleteList}>
+                                    <button className="btn" onClick={handleClickOnDeleteList}>
                                         Delete list
                                     </button>
                                 </div>

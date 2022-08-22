@@ -1,71 +1,48 @@
-.shallowCard {
-  border: 1px dashed rgba(0, 0, 0, 0.2);
-  padding: 30px;
-  background-color: transparent;
-  width: 100%;
-  border-radius: 10px;
-}
+@use "../../styles/colors";
+@use "../../styles/spacing";
 
 
 .card {
-  padding: 20px;
-  background-color: #F4F4F4;
   border-radius: 10px;
   height: max-content;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-
-  :global {
-
-
-    .title {
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .description {
-      word-wrap: break-word;
-      opacity: 0.4;
-      font-size: 14px;
-      font-weight: 300;
-    }
-  }
+  gap: spacing.$sm;
+  word-wrap: break-word;
 }
 
 
 .modal {
-
-  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: spacing.$lg;
 
   & :global {
+
+    .confirmation {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: spacing.$md;
+
+      > div {
+        display: flex;
+        gap: spacing.$md;
+        align-items: center;
+      }
+    }
 
     .title-container {
 
       display: flex;
       flex-direction: column;
-      gap: 5px;
       justify-content: center;
+      gap: spacing.$sm;
 
       .input-container {
         display: flex;
         align-items: center;
-
-        input {
-          flex: 1;
-          border-radius: 5px;
-          font-size: 18px;
-          font-weight: 500;
-          padding: 5px;
-
-          &:focus {
-            box-shadow: 0px 0px 9px 1px #27FFED;
-          }
-        }
 
         span {
           width: 30px;
@@ -76,20 +53,16 @@
         }
       }
 
-      p {
-        font-size: 14px;
-      }
-
     }
 
     .description-and-actions {
 
       display: flex;
-      gap: 20px;
+      gap: spacing.$xl;
 
       .description-container {
         display: flex;
-        gap: 10px;
+        gap: spacing.$md;
         width: 100%;
         flex-direction: column;
         word-break: break-word;
@@ -98,84 +71,38 @@
         .text-area {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: spacing.$xl;
 
           > div {
             display: flex;
-            gap: 20px;
+            gap: spacing.$xl;
             align-items: center;
-
-            > button:first-child {
-              border-radius: 5px;
-              padding: 5px 10px;
-              background-color: steelblue;
-              cursor: pointer;
-              color: white;
-            }
-
           }
 
           textarea {
-            padding: 10px;
             height: 150px;
             width: 95%;
-
-            &:focus {
-              box-shadow: 0px 0px 9px 1px #27FFED;
-            }
-
           }
 
         }
 
         > div:first-child {
-
-          p {
-            font-weight: 500;
-          }
-
-          button {
-            border-radius: 5px;
-            padding: 5px 10px;
-            background-color: rgba(65, 65, 65, 0.2);
-            cursor: pointer;
-          }
-
           display: flex;
-          gap: 10px;
           align-items: center;
+          gap: spacing.$md;
         }
       }
 
       .actions {
-
         display: flex;
         flex-direction: column;
-        gap: 5px;
-
+        gap: spacing.$sm;
         min-width: 150px;
 
         h2 {
-          font-size: 14px;
           text-align: start;
         }
-
-        button {
-          width: 100%;
-          border-radius: 5px;
-          padding: 5px 10px;
-          background-color: rgba(65, 65, 65, 0.2);
-          cursor: pointer;
-        }
       }
-
     }
-
-
   }
-}
-
-.focus {
-  border-radius: 5px;
-  box-shadow: 0px 0px 9px 1px #27FFED;
 }

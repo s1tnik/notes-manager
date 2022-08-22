@@ -1,43 +1,34 @@
+@use "../../styles/colors";
+@use "../../styles/spacing";
+
 .wrapper {
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: spacing.$md;
 
   & :global {
     .column {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: spacing.$md;
       height: content-box;
-
     }
   }
 }
 
 .columnHeader {
-  border: 1px solid aqua;
   border-radius: 10px;
-  background-color: #F4F4F4;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 20px;
-  font-size: 16px;
-  font-weight: 400;
-  gap: 10px;
-
-  > button {
-    align-self: flex-start;
-    font-size: 24px;
-    cursor: pointer;
-  }
+  gap: spacing.$md;
 }
 
 .columnFooter {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: spacing.$md;
   flex-grow: 1;
 
   & :global {
@@ -46,39 +37,12 @@
       background-color: rgba(0, 0, 0, 0.03);
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      padding: 10px;
-
-      textarea {
-        background-color: white;
-        border-radius: 5px;
-        padding: 8px;
-      }
+      gap: spacing.$lg;
 
       .actions {
         display: flex;
         align-items: center;
-        gap: 10px;
-
-        > button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-
-          &:first-child {
-            padding: 5px 10px;
-            color: #FFF;
-            border-radius: 5px;
-            border: none;
-            background-color: cadetblue;
-            width: max-content;
-
-            &:disabled {
-              cursor: not-allowed;
-            }
-          }
-        }
+        gap: spacing.$md;
       }
     }
   }
@@ -88,16 +52,13 @@
   display: flex;
   flex-direction: column;
   width: max(300px, 20vw);
-  background-color: white;
-  border: 1px solid #091e4221;
+  box-shadow: 0 0 9px 1px colors.$primary;
   border-radius: 5px;
 
   & :global {
     .menu-item {
-      padding: 8px;
-
       &:first-child {
-        border-bottom: 1px solid #091e4221;
+        border-bottom: 1px solid colors.$secondary;
         display: flex;
         align-items: center;
 
@@ -117,38 +78,19 @@
 
       &:not(:first-child):hover {
         cursor: pointer;
-        background-color: #F4F4F4;
+        background-color: darken(colors.$light, 4);
       }
 
 
     }
 
     .text-area {
-      padding: 8px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: spacing.$md;
 
       textarea {
-        box-shadow: inset 0 0 0 2px #dfe1e6;
-        min-width: 100%;
-        border-radius: 5px;
-        padding: 5px;
         resize: vertical;
-      }
-
-      button {
-        cursor: pointer;
-        padding: 5px 10px;
-        color: #FFF;
-        border-radius: 5px;
-        border: none;
-        background-color: cadetblue;
-        width: max-content;
-
-        &:disabled {
-          cursor: not-allowed;
-        }
       }
     }
   }

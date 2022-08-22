@@ -1,0 +1,64 @@
+$dark: #212121;
+$primary: #6D9886;
+$secondary: #D9CAB3;
+$light: #F6F6F6;
+
+.bg {
+  &-dark {
+    background-color: $dark;
+    color: $light;
+
+    &.light {
+      background-color: $light;
+      color: $dark;
+    }
+  }
+
+  &-primary {
+    background-color: $primary;
+    color: $light;
+  }
+
+  &-secondary {
+    background-color: $secondary;
+    color: $light;
+  }
+
+  &-light {
+    background-color: $light;
+    color: $dark;
+
+    &.dark {
+      background-color: $dark;
+      color: $light;
+    }
+  }
+}
+
+.color {
+
+  &-dark {
+    color: $dark;
+
+    &.light {
+      color: $light;
+    }
+  }
+
+  &-light {
+    color: $light;
+
+    &.dark {
+      color: $dark;
+    }
+  }
+
+  &-primary {
+    color: $primary;
+  }
+
+  &-secondary {
+    color: $secondary;
+  }
+
+}

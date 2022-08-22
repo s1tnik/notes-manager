@@ -9,7 +9,7 @@ import {RootState} from "../../app/store";
 import {mergeRefs} from "react-merge-refs";
 import EmptyCard from "../EmptyCard";
 import Popup from "reactjs-popup";
-import {AiOutlineClose, AiOutlineEllipsis} from "react-icons/ai";
+import {AiOutlineClose} from "react-icons/ai";
 import {changeCard} from "../../app/listsSlice";
 
 interface CardProps {
@@ -34,28 +34,37 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
     const [cardValues, setCardValues] = useState({title: card.title, description: card.description});
 
-    const [isEditingDescription, setIsEditingDescription] = useState(false);
-
     const handleCardValueChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, type: "title" | 'description') => {
         setCardValues(prev => ({...prev, [type]: e.target.value}))
     }
 
-    const handleSaveDescription = () => {
-        setIsEditingDescription(false)
-    }
-
-    const handleCancelDescription = () => {
-        setIsEditingDescription(false);
-        setCardValues(prev => ({...prev, description: card.description}))
-    }
-
-
     const [open, setOpen] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
     const closeModal = () => {
-        if (!cardValues.title) return;
-        setOpen(false);
-        dispatch(changeCard({cardData: cardValues, listId, cardIndex: index}))
+        if (cardValues.title !== card.title || cardValues.description !== card.description) {
+            setShowConfirmation(true);
+        } else {
+            setOpen(false);
+            setCardValues({title: card.title, description: card.description});
+        }
     };
+
+    const onSave = () => {
+        if (!cardValues.title) return;
+        dispatch(changeCard({cardData: cardValues, listId, cardIndex: index}))
+        setOpen(false);
+    }
+
+    const onConfirmClick = () => {
+        setShowConfirmation(false);
+        setOpen(false);
+        setCardValues({title: card.title, description: card.description});
+    }
+
+    const onDenyClick = () => {
+        setShowConfirmation(false);
+    }
 
     const [{isDraggingCard}, drag] = useDrag(() => ({
         type: ItemTypes.CARD,
@@ -107,54 +116,67 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
 
         return (
             <>
-                <Popup open={open} closeOnDocumentClick={!!cardValues.title} onClose={closeModal}>
-                    <div onClick={(e) => {
-                        if (!(e.target as Element).closest(".text-area") && isEditingDescription) {
-                            handleSaveDescription();
-                        }
-                    }} className={styles.modal}>
-                        <div className="title-container">
-                            <div className="input-container">
-                                <input autoFocus className={!cardValues.title ? styles.focus : ""}
-                                       onChange={(e) => handleCardValueChange(e, "title")} value={cardValues.title}
-                                       type="text"/>
-                                <span onClick={closeModal}><AiOutlineClose/></span>
-                            </div>
-                            <p>In list "{list.name}"</p>
-                        </div>
-                        <div className="description-and-actions">
-                            <div className="description-container">
+                <Popup open={open}
+                       closeOnDocumentClick={cardValues.title === card.title && cardValues.description === card.description}
+                       onClose={closeModal}>
+                    <div className={`${styles.modal} p-xl`}>
+                        {showConfirmation ?
+                            <div className="confirmation">
+                                <h2>Are you sure you want to discard your changes?</h2>
                                 <div>
-                                    <h2>Description</h2>
-                                    {!isEditingDescription &&
-                                    <button onClick={() => setIsEditingDescription(true)}>Edit</button>}
+                                    <button onClick={onConfirmClick} className="btn">Yes</button>
+                                    <button onClick={onDenyClick} className="btn btn-transparent">No</button>
                                 </div>
-                                {isEditingDescription ? <div className="text-area">
-                                            <textarea onChange={(e) => handleCardValueChange(e, "description")}
+                            </div>
+                            :
+                            <>
+                                <div className="title-container">
+                                    <div className="input-container">
+                                        <input autoFocus className={`${!cardValues.title ? "focus" : ""} p-sm txt-md`}
+                                               onChange={(e) => handleCardValueChange(e, "title")}
+                                               value={cardValues.title}
+                                               type="text"/>
+                                        <span onClick={closeModal}><AiOutlineClose/></span>
+                                    </div>
+                                    <p className="txt-sm">In list "{list.name}"</p>
+                                </div>
+                                <div className="description-and-actions">
+                                    <div className="description-container">
+                                        <div>
+                                            <h2 className="txt-md">Description</h2>
+                                        </div>
+                                        <div className="text-area">
+                                            <textarea className="focus"
+                                                      onChange={(e) => handleCardValueChange(e, "description")}
                                                       autoFocus
                                                       value={cardValues.description}/>
-                                        <div>
-                                            <button onClick={handleSaveDescription}>Save</button>
-                                            <button onClick={handleCancelDescription}>Cancel</button>
+                                            <div>
+                                                <button disabled={!cardValues.title} onClick={onSave}
+                                                        className="btn">Save
+                                                </button>
+                                                <button onClick={closeModal} className="btn btn-transparent">Cancel
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div> :
-                                    <p onClick={() => setIsEditingDescription(true)}>{cardValues.description}</p>
-                                }
-                            </div>
-                            <div className="actions">
-                                <h2>Actions</h2>
-                                <button>Delete</button>
-                            </div>
-                        </div>
+                                    </div>
+                                    <div className="actions">
+                                        <h2 className="txt-md">Actions</h2>
+                                        <button className="btn">Delete</button>
+                                    </div>
+                                </div>
+                            </>}
+
                     </div>
                 </Popup>
+
                 {renderShallowCard && hoveredCard?.from === "top" &&
                 <EmptyCard style={{height: draggableCard?.height}}/>}
 
-                <div onClick={() => setOpen(o => !o)} ref={mergeRefs([drag, drop, cardRef])} className={styles.card}>
+                <div onClick={() => setOpen(true)} ref={mergeRefs([drag, drop, cardRef])}
+                     className={`${styles.card} p-xl bg-light`}>
                     <p className="title">{title}</p>
-                    {description && <p className="description">{description.length > 150 ? <>{description.slice(0, 150)}
-                        <AiOutlineEllipsis/></> : description}</p>}
+                    {description && <p className="txt-sm">{description.length > 150 ? `${description.slice(0, 150)}
+                        ...` : description}</p>}
                 </div>
 
                 {renderShallowCard && hoveredCard?.from === "bottom" &&

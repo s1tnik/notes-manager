@@ -15,3 +15,9 @@ export interface List {
     id: string;
 }
 
+export interface Advertisement {
+    id: number;
+    title: string;
+    body: string;
+}
+

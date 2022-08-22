@@ -1,0 +1,25 @@
+$sm: 14px;
+$md: 18px;
+$lg: 22px;
+$xl: 26px;
+
+.txt {
+  &-sm {
+    font-size: $sm;
+    font-weight: 300;
+  }
+
+  &-md {
+    font-size: $md;
+  }
+
+  &-lg {
+    font-size: $lg;
+    font-weight: 500;
+  }
+
+  &-xl {
+    font-size: $xl;
+    font-weight: 600;
+  }
+}
