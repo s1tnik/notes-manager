@@ -1,28 +1,50 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {v4 as uuidv4} from 'uuid';
 import Column from './components/Column';
 import EmptyCard from './components/EmptyCard';
 import {DndProvider} from 'react-dnd'
 import {HTML5Backend} from 'react-dnd-html5-backend'
 import {useSelector} from 'react-redux';
-import {AppDispatch, RootState} from './app/store';
+import {RootState} from './app/store';
 import {useAppDispatch} from './app/hooks';
 import {addList} from './app/listsSlice';
 import DndWrapper from './components/DndWrapper';
 import {AiOutlineClose} from 'react-icons/ai';
-import {fetchAdById, resetadvertisementState} from './app/advertisement';
-import { Ad } from './components/Ad/Ad';
+import Ad from './components/Ad';
+import {fetchAdById, resetAd, resetadvertisementState } from './app/advertisement';
+import useTheme from './hooks/useTheme';
 
 function App() {
 
     const lists = Object.entries(useSelector((state: RootState) => state.lists)).map(([id, list]) => ({id, ...list}))
+    const {usedAdvertisemens} = useSelector((state: RootState) => state.ad);
+
     const dispatch = useAppDispatch();
 
     const [textAreaValue, setTextAreaValue] = useState("");
     const [isAddingColumn, setIsAddingColumn] = useState(false);
 
+    const theme = useTheme();
+
+    useEffect(() => {
+
+        if (usedAdvertisemens.length === 100) {
+            dispatch(resetadvertisementState())
+        }
+
+        let randomId = Math.floor(Math.random() * 101);
+
+        // @ts-ignore
+        dispatch(fetchAdById(randomId))
+
+        return () => {
+            dispatch(resetAd())
+        }
+
+    }, []);
+
     const onAddList = (): void => {
-        dispatch(addList({id: uuidv4(), cards: [], name: textAreaValue}))
+        dispatch(addList({id: uuidv4(), cards: [], name: textAreaValue.trim()}))
         setIsAddingColumn(false);
         setTextAreaValue("");
     }
@@ -42,7 +64,6 @@ function App() {
         }
     }
 
-
     return (
             <DndProvider backend={HTML5Backend}>
                 <DndWrapper>
@@ -53,7 +74,7 @@ function App() {
                             <textarea onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange}
                                       value={textAreaValue}/>
                                 <div className="actions">
-                                    <button className="btn" disabled={!textAreaValue} onClick={onAddList}>Add list</button>
+                                    <button className="btn" disabled={!textAreaValue.trim()} onClick={onAddList}>Add list</button>
                                     <button className="btn btn-transparent" onClick={handleOnCloseClick}><AiOutlineClose/>
                                     </button>
                                 </div>

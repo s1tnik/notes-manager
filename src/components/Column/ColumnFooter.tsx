@@ -33,7 +33,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCa
     }))
 
     const onAddCard = (): void => {
-        dispatch(addCard({listId, card: {title: textAreaValue, id: uuidv4()}}))
+        dispatch(addCard({listId, card: {title: textAreaValue.trim(), id: uuidv4()}}))
         setIsAddingCard(false);
         setTextAreaValue("");
     }
@@ -61,7 +61,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCa
                 <div className="add-card-container p-md">
                     <textarea onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
                     <div className="actions">
-                        <button className="btn" disabled={!textAreaValue} onClick={onAddCard}>Add card</button>
+                        <button className="btn" disabled={!textAreaValue.trim()} onClick={onAddCard}>Add card</button>
                         <button className="btn btn-transparent" onClick={handleOnCloseClick}><AiOutlineClose/></button>
                     </div>
                 </div>

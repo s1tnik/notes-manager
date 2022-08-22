@@ -28,6 +28,9 @@ const advertisementSlice = createSlice({
         resetadvertisementState: (state) => {
             return initialState;
         },
+        resetAd: (state) => {
+            state.currentAdd = undefined;
+        },
     },
 extraReducers: (builder) => {
   builder
@@ -49,7 +52,7 @@ extraReducers: (builder) => {
 },
 })
 
-export const {resetadvertisementState} = advertisementSlice.actions;
+export const {resetadvertisementState, resetAd} = advertisementSlice.actions;
 
 
 export default advertisementSlice.reducer;

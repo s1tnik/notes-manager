@@ -64,8 +64,10 @@ textarea, input {
 .dnd-wrapper {
   overflow-y: visible;
   overflow-x: scroll;
-  display: flex;
   height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  position: relative;
 }
 
 .cards-container {
@@ -73,7 +75,6 @@ textarea, input {
   display: flex;
   gap: spacing.$xl;
   flex-wrap: unset;
-
 
   > div {
     width: max(300px, 20vw);
@@ -131,4 +132,13 @@ textarea, input {
   border: 6px solid #cef;
   border-color: #cef transparent #cef transparent;
   animation: loader 1.2s linear infinite;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

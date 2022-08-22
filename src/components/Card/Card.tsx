@@ -11,6 +11,7 @@ import EmptyCard from "../EmptyCard";
 import Popup from "reactjs-popup";
 import {AiOutlineClose} from "react-icons/ai";
 import {changeCard} from "../../app/listsSlice";
+import Ad from "../Ad";
 
 interface CardProps {
     card: ICard
@@ -151,7 +152,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                                                       autoFocus
                                                       value={cardValues.description}/>
                                             <div>
-                                                <button disabled={!cardValues.title} onClick={onSave}
+                                                <button disabled={!cardValues.title.trim()} onClick={onSave}
                                                         className="btn">Save
                                                 </button>
                                                 <button onClick={closeModal} className="btn btn-transparent">Cancel
@@ -165,7 +166,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                                     </div>
                                 </div>
                             </>}
-
+                        <Ad/>
                     </div>
                 </Popup>
 
