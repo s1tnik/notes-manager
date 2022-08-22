@@ -56,7 +56,7 @@ function App() {
     }
 
     const handleOnBlur = () => {
-        if (!textAreaValue) {
+        if (!textAreaValue.trim()) {
             handleOnCloseClick();
         }
     }

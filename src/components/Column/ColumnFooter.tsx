@@ -48,7 +48,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCa
     }
 
     const handleOnBlur = () => {
-        if (!textAreaValue) {
+        if (!textAreaValue.trim()) {
             handleOnCloseClick();
         }
     }

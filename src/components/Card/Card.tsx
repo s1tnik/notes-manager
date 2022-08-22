@@ -141,28 +141,22 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                                     </div>
                                     <p className="txt-sm">In list "{list.name}"</p>
                                 </div>
-                                <div className="description-and-actions">
-                                    <div className="description-container">
-                                        <div>
-                                            <h2 className="txt-md">Description</h2>
-                                        </div>
-                                        <div className="text-area">
+                                <div className="description-container">
+                                    <div>
+                                        <h2 className="txt-md">Description</h2>
+                                    </div>
+                                    <div className="text-area">
                                             <textarea className="focus"
                                                       onChange={(e) => handleCardValueChange(e, "description")}
                                                       autoFocus
                                                       value={cardValues.description}/>
-                                            <div>
-                                                <button disabled={!cardValues.title.trim()} onClick={onSave}
-                                                        className="btn">Save
-                                                </button>
-                                                <button onClick={closeModal} className="btn btn-transparent">Cancel
-                                                </button>
-                                            </div>
+                                        <div>
+                                            <button disabled={!cardValues.title.trim()} onClick={onSave}
+                                                    className="btn">Save
+                                            </button>
+                                            <button onClick={closeModal} className="btn btn-transparent">Cancel
+                                            </button>
                                         </div>
-                                    </div>
-                                    <div className="actions">
-                                        <h2 className="txt-md">Actions</h2>
-                                        <button className="btn">Delete</button>
                                     </div>
                                 </div>
                             </>}

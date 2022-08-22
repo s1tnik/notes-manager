@@ -55,53 +55,36 @@
 
     }
 
-    .description-and-actions {
-
+    .description-container {
       display: flex;
-      gap: spacing.$xl;
+      gap: spacing.$md;
+      width: 100%;
+      flex-direction: column;
+      word-break: break-word;
 
-      .description-container {
+
+      .text-area {
         display: flex;
-        gap: spacing.$md;
-        width: 100%;
         flex-direction: column;
-        word-break: break-word;
+        gap: spacing.$xl;
 
-
-        .text-area {
+        > div {
           display: flex;
-          flex-direction: column;
           gap: spacing.$xl;
-
-          > div {
-            display: flex;
-            gap: spacing.$xl;
-            align-items: center;
-          }
-
-          textarea {
-            height: 150px;
-            width: 95%;
-          }
-
-        }
-
-        > div:first-child {
-          display: flex;
           align-items: center;
-          gap: spacing.$md;
         }
+
+        textarea {
+          height: 150px;
+          width: 96%;
+        }
+
       }
 
-      .actions {
+      > div:first-child {
         display: flex;
-        flex-direction: column;
-        gap: spacing.$sm;
-        min-width: 150px;
-
-        h2 {
-          text-align: start;
-        }
+        align-items: center;
+        gap: spacing.$md;
       }
     }
   }
