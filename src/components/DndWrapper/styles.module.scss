@@ -1,0 +1,15 @@
+@use "../../styles/colors";
+
+.dndWrapper {
+  overflow-y: visible;
+  overflow-x: scroll;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  position: relative;
+
+  &.dark {
+    background-color: colors.$darker;
+  }
+
+}

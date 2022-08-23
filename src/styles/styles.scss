@@ -15,6 +15,11 @@ textarea, input {
   &:focus {
     box-shadow: 0 0 9px 1px colors.$primary;
   }
+
+  &.dark {
+    box-shadow: 0 0 9px 1px colors.$secondary;
+    color: colors.$light;
+  }
 }
 
 
@@ -33,38 +38,28 @@ textarea, input {
   align-items: center;
   justify-content: center;
 
+  &.dark {
+    background-color: colors.$secondary;
+  }
+
   &-transparent {
     background-color: transparent;
     color: colors.$dark;
+
+    &.dark {
+      color: colors.$light;
+      background-color: transparent;
+    }
 
     &:disabled {
       cursor: not-allowed;
     }
   }
 
-  &-light {
-    background-color: colors.$secondary;
-    color: colors.$dark;
-  }
-
-  &-dark {
-    background-color: colors.$primary;
-    color: colors.$light;
-  }
-
   &:disabled {
     cursor: not-allowed;
   }
 
-}
-
-.dnd-wrapper {
-  overflow-y: visible;
-  overflow-x: scroll;
-  height: 100vh;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  position: relative;
 }
 
 .cards-container {
@@ -85,6 +80,10 @@ textarea, input {
   flex-direction: column;
   gap: spacing.$lg;
   height: max-content;
+
+  &.dark {
+    background-color: colors.$dark;
+  }
 
   .actions {
     display: flex;

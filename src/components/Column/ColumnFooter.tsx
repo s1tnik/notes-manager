@@ -10,6 +10,7 @@ import {RootState} from "../../app/store"
 import {ItemTypes} from "../../types"
 import EmptyCard from "../EmptyCard"
 import styles from "./styles.module.scss"
+import { ThemeContext } from "../../context/themeContext";
 
 interface ColumnFooterProps {
     listId: string;
@@ -20,6 +21,8 @@ interface ColumnFooterProps {
 export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCard, isAddingCard}) => {
 
     const {hoveredCard, draggableCard} = useSelector((state: RootState) => (state.dragging));
+
+    const theme = React.useContext(ThemeContext);
 
     const dispatch = useAppDispatch();
 
@@ -58,11 +61,11 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({listId, setIsAddingCa
             {hoveredCard?.listId === listId && hoveredCard?.shallowCard &&
             <EmptyCard style={{height: draggableCard?.height}}/>}
             {isAddingCard ?
-                <div className="add-card-container p-md">
-                    <textarea onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
+                <div className={`add-card-container p-md ${theme}`}>
+                    <textarea className={`focus ${theme}`} onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
                     <div className="actions">
-                        <button className="btn" disabled={!textAreaValue.trim()} onClick={onAddCard}>Add card</button>
-                        <button className="btn btn-transparent" onClick={handleOnCloseClick}><AiOutlineClose/></button>
+                        <button className={`btn ${theme}`} disabled={!textAreaValue.trim()} onClick={onAddCard}>Add card</button>
+                        <button className={`btn btn-transparent ${theme}`} onClick={handleOnCloseClick}><AiOutlineClose/></button>
                     </div>
                 </div>
                 : <EmptyCard onClick={() => setIsAddingCard(true)} title="+ Add new card"/>}

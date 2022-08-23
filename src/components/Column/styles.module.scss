@@ -24,7 +24,12 @@
   align-items: center;
   gap: spacing.$md;
   background-color: colors.$primary;
-  color: colors.$light
+  color: colors.$light;
+
+  &.dark {
+    background-color: colors.$secondary;
+  }
+
 }
 
 .columnFooter {
@@ -40,6 +45,11 @@
       display: flex;
       flex-direction: column;
       gap: spacing.$lg;
+
+      &.dark {
+        background-color: colors.$dark;
+        color: colors.$light;
+      }
 
       .actions {
         display: flex;
@@ -58,12 +68,19 @@
   border-radius: 5px;
   background-color: colors.$light;
 
+  &.dark {
+    background-color: colors.$dark;
+    color: colors.$light;
+    box-shadow: 0 0 9px 1px colors.$secondary;
+  }
+
   & :global {
     .menu-item {
       &:first-child {
-        border-bottom: 1px solid colors.$secondary;
+        border-bottom: 1px solid;
         display: flex;
         align-items: center;
+        border-color: colors.$darker;
 
         p {
           flex: 1;
@@ -81,7 +98,8 @@
 
       &:not(:first-child):hover {
         cursor: pointer;
-        background-color: darken(colors.$light, 4);
+        filter: brightness(150%);
+        background-color: inherit;
       }
 
 

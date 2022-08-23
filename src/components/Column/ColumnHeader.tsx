@@ -7,6 +7,7 @@ import {useAppDispatch} from "../../app/hooks";
 import {addList, removeList} from "../../app/listsSlice";
 import {RootState} from "../../app/store";
 import styles from "./styles.module.scss"
+import { ThemeContext } from "../../context/themeContext";
 
 interface ColumnHeaderProps {
     header: string;
@@ -26,6 +27,8 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
 
     const dispatch = useAppDispatch();
     const list = useSelector((state: RootState) => state.lists[listId]);
+
+    const theme = React.useContext(ThemeContext);
 
     const [currentAction, setCurrentAction] = useState<ActionsEnum>(ActionsEnum.INITIAL);
     const [textAreaValue, setTextAreaValue] = useState(list.name);
@@ -59,7 +62,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
     }
 
     return (
-        <div className={`${styles.columnHeader} p-xl`}>
+        <div className={`${styles.columnHeader} ${styles[theme]} p-xl`}>
             {header}
             <Popup
                 trigger={<button><AiOutlineEllipsis/></button>}
@@ -73,7 +76,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                 {close => (
                     <>
                         {currentAction === ActionsEnum.INITIAL && (
-                            <div className={`${styles.menu}`}>
+                            <div className={`${styles.menu} ${styles[theme]}`}>
                                 <div className="menu-item p-md">
                                     <span/>
                                     <p>List actions</p>
@@ -89,22 +92,22 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                             </div>
                         )}
                         {currentAction === ActionsEnum.COPY_LIST && (
-                            <div className={`${styles.menu}`}>
+                            <div className={`${styles.menu} ${styles[theme]}`}>
                                 <div className="menu-item p-md">
                                     <span onClick={() => setCurrentAction(ActionsEnum.INITIAL)}><AiOutlineLeft/></span>
                                     <p>Copy list</p>
                                     <span onClick={close}><AiOutlineClose/></span>
                                 </div>
                                 <div className="text-area p-md">
-                                    <textarea className="focus" autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
-                                    <button className="btn" disabled={!textAreaValue} onClick={() => handleClickOnCopyList(close)}>Copy
+                                    <textarea className={`focus ${theme}`} autoFocus onChange={handleOnTextAreaChange} value={textAreaValue}/>
+                                    <button className={`btn ${theme}`} disabled={!textAreaValue} onClick={() => handleClickOnCopyList(close)}>Copy
                                         list
                                     </button>
                                 </div>
                             </div>
                         )}
                         {currentAction === ActionsEnum.DELETE_LIST && (
-                            <div className={`${styles.menu}`}>
+                            <div className={`${styles.menu} ${styles[theme]}`}>
                                 <div className="menu-item p-md">
                                     <span onClick={() => setCurrentAction(ActionsEnum.INITIAL)}><AiOutlineLeft/></span>
                                     <p>Delete list</p>
@@ -112,7 +115,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                                 </div>
                                 <div className="text-area p-md">
                                     <p>Are you sure you want to delete "{list.name}" list?</p>
-                                    <button className="btn" onClick={handleClickOnDeleteList}>
+                                    <button className={`btn ${theme}`} onClick={handleClickOnDeleteList}>
                                         Delete list
                                     </button>
                                 </div>

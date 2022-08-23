@@ -11,6 +11,11 @@
   gap: spacing.$sm;
   word-wrap: break-word;
   background-color: colors.$light;
+
+  &.dark {
+    background-color: colors.$dark;
+    color: colors.$light
+  }
 }
 
 
@@ -18,6 +23,11 @@
   display: flex;
   flex-direction: column;
   gap: spacing.$lg;
+
+  &.dark {
+    background-color: colors.$dark;
+    color: colors.$light;
+  }
 
   & :global {
 

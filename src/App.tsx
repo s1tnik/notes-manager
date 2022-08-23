@@ -11,14 +11,19 @@ import {addList} from './app/listsSlice';
 import DndWrapper from './components/DndWrapper';
 import {AiOutlineClose} from 'react-icons/ai';
 import Ad from './components/Ad';
-import {fetchAdById, resetAd, resetadvertisementState } from './app/advertisement';
+import {fetchAdById, resetAd, resetadvertisementState} from './app/advertisement';
+import { ThemeContext } from './context/themeContext';
 
 function App() {
 
-    const lists = Object.entries(useSelector((state: RootState) => state.lists)).map(([id, list]) => ({id, ...list}))
-    const {usedAdvertisemens} = useSelector((state: RootState) => state.ad);
+    const {
+        lists,
+        usedAdvertisemens
+    } = useSelector((state: RootState) => ({lists: Object.entries(state.lists).map(([id, list]) => ({id, ...list})), ...state.ad}))
 
     const dispatch = useAppDispatch();
+
+    const theme = React.useContext(ThemeContext);
 
     const [textAreaValue, setTextAreaValue] = useState("");
     const [isAddingColumn, setIsAddingColumn] = useState(false);
@@ -62,25 +67,26 @@ function App() {
     }
 
     return (
-            <DndProvider backend={HTML5Backend}>
-                <DndWrapper>
-                    <div className="cards-container">
-                        {!!lists.length && lists.map((list, index) => <Column key={list.id} list={list} index={index}/>)}
-                        {isAddingColumn ?
-                            <div className="add-card-container p-md">
-                            <textarea onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange}
+        <DndProvider backend={HTML5Backend}>
+            <DndWrapper>
+                <div className="cards-container">
+                    {!!lists.length && lists.map((list, index) => <Column key={list.id} list={list} index={index}/>)}
+                    {isAddingColumn ?
+                        <div className={`add-card-container p-md ${theme}`}>
+                            <textarea className={`focus ${theme}`} onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange}
                                       value={textAreaValue}/>
-                                <div className="actions">
-                                    <button className="btn" disabled={!textAreaValue.trim()} onClick={onAddList}>Add list</button>
-                                    <button className="btn btn-transparent" onClick={handleOnCloseClick}><AiOutlineClose/>
-                                    </button>
-                                </div>
+                            <div className="actions">
+                                <button className={`btn ${theme}`} disabled={!textAreaValue.trim()} onClick={onAddList}>Add list
+                                </button>
+                                <button className={`btn btn-transparent ${theme}`} onClick={handleOnCloseClick}><AiOutlineClose/>
+                                </button>
                             </div>
-                            : <EmptyCard onClick={() => setIsAddingColumn(true)} title="Create a new list"/>}
-                    </div>
-                    <Ad/>
-                </DndWrapper>
-            </DndProvider>
+                        </div>
+                        : <EmptyCard onClick={() => setIsAddingColumn(true)} title="Create a new list"/>}
+                </div>
+                <Ad/>
+            </DndWrapper>
+        </DndProvider>
     );
 
 }

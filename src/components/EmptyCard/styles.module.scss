@@ -1,3 +1,5 @@
+@use "../../styles/colors";
+
 .emptyCard {
   cursor: pointer;
   border: 1px dashed rgba(0, 0, 0, 0.2);
@@ -7,4 +9,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &.dark {
+    border-color: rgba(colors.$light, 0.7);
+    color: colors.$light;
+  }
 }

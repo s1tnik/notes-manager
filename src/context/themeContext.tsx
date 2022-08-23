@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from "react";
-
+import React, { useState } from "react";
+import { useEffect } from "react";
 
 type theme = "light" | "dark"
 
-const useTheme = (): theme => {
+export const ThemeContext = React.createContext<theme>("light");
 
-    const [theme, setTheme] = useState<theme>('light');
+export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+
+    const [theme, setTheme] = useState<theme>("light");
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -28,7 +30,9 @@ const useTheme = (): theme => {
     }, []);
 
 
-    return theme
+    return (
+        <ThemeContext.Provider value={theme}>
+            {children}
+        </ThemeContext.Provider>
+    )
 }
-
-export default useTheme;

@@ -12,6 +12,7 @@ import Popup from "reactjs-popup";
 import {AiOutlineClose} from "react-icons/ai";
 import {changeCard} from "../../app/listsSlice";
 import Ad from "../Ad";
+import { ThemeContext } from "../../context/themeContext";
 
 interface CardProps {
     card: ICard
@@ -30,6 +31,8 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
         ...state.dragging,
         list: state.lists[listId]
     }));
+
+    const theme = React.useContext(ThemeContext);
 
     const cardRef = useRef<HTMLDivElement>(null);
 
@@ -120,20 +123,20 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                 <Popup open={open}
                        closeOnDocumentClick={cardValues.title === card.title && cardValues.description === card.description}
                        onClose={closeModal}>
-                    <div className={`${styles.modal} p-xl`}>
+                    <div className={`${styles.modal} ${styles[theme]} p-xl`}>
                         {showConfirmation ?
                             <div className="confirmation">
                                 <h2>Are you sure you want to discard your changes?</h2>
                                 <div>
-                                    <button onClick={onConfirmClick} className="btn">Yes</button>
-                                    <button onClick={onDenyClick} className="btn btn-transparent">No</button>
+                                    <button onClick={onConfirmClick} className={`btn ${theme}`}>Yes</button>
+                                    <button onClick={onDenyClick} className={`btn btn-transparent ${theme}`}>No</button>
                                 </div>
                             </div>
                             :
                             <>
                                 <div className="title-container">
                                     <div className="input-container">
-                                        <input autoFocus className={`${!cardValues.title ? "focus" : ""} p-sm txt-md`}
+                                        <input autoFocus className={`${!cardValues.title ? "focus" : ""} ${theme} p-sm txt-md`}
                                                onChange={(e) => handleCardValueChange(e, "title")}
                                                value={cardValues.title}
                                                type="text"/>
@@ -146,15 +149,15 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                                         <h2 className="txt-md">Description</h2>
                                     </div>
                                     <div className="text-area">
-                                            <textarea className="focus"
+                                            <textarea className={`focus ${theme}`}
                                                       onChange={(e) => handleCardValueChange(e, "description")}
                                                       autoFocus
                                                       value={cardValues.description}/>
                                         <div>
                                             <button disabled={!cardValues.title.trim()} onClick={onSave}
-                                                    className="btn">Save
+                                                    className={`btn ${theme}`}>Save
                                             </button>
-                                            <button onClick={closeModal} className="btn btn-transparent">Cancel
+                                            <button onClick={closeModal} className={`btn btn-transparent ${theme}`}>Cancel
                                             </button>
                                         </div>
                                     </div>
@@ -168,7 +171,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                 <EmptyCard style={{height: draggableCard?.height}}/>}
 
                 <div onClick={() => setOpen(true)} ref={mergeRefs([drag, drop, cardRef])}
-                     className={`${styles.card} p-xl`}>
+                     className={`${styles.card} ${styles[theme]} p-xl`}>
                     <p className="title">{title}</p>
                     {description && <p className="txt-sm">{description.length > 100 ? `${description.slice(0, 150)}
                         ...` : description}</p>}
