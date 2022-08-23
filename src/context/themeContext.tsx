@@ -1,24 +1,32 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, {useState} from "react";
+import {useEffect} from "react";
 
 type theme = "light" | "dark"
 
-export const ThemeContext = React.createContext<theme>("light");
+const getCurrentTheme = (): theme => {
+    const currentHour = new Date().getHours();
 
-export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+    if (currentHour >= 18 && currentHour < 6) {
+        return "dark"
+    }
 
-    const [theme, setTheme] = useState<theme>("light");
+    return "light"
+}
+
+
+export const ThemeContext = React.createContext<theme>(getCurrentTheme());
+
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
+
+    const [theme, setTheme] = useState<theme>(getCurrentTheme());
 
     useEffect(() => {
         const interval = setInterval(() => {
-            const currentHour = new Date().getHours();
 
-            if (theme !== "dark" && currentHour >= 18) {
-                setTheme("dark")
-            }
+            const currentTheme = getCurrentTheme();
 
-            if (theme !== "light" && currentHour < 18) {
-                setTheme("light")
+            if (theme !== currentTheme) {
+                setTheme(currentTheme)
             }
 
         }, 10000)

@@ -12,7 +12,7 @@ import DndWrapper from './components/DndWrapper';
 import {AiOutlineClose} from 'react-icons/ai';
 import Ad from './components/Ad';
 import {fetchAdById, resetAd, resetadvertisementState} from './app/advertisement';
-import { ThemeContext } from './context/themeContext';
+import {ThemeContext} from './context/themeContext';
 
 function App() {
 
@@ -35,6 +35,10 @@ function App() {
         }
 
         let randomId = Math.floor(Math.random() * 101);
+
+        while (!usedAdvertisemens.includes(randomId)) {
+            randomId = Math.floor(Math.random() * 101)
+        }
 
         // @ts-ignore
         dispatch(fetchAdById(randomId))
@@ -73,12 +77,15 @@ function App() {
                     {!!lists.length && lists.map((list, index) => <Column key={list.id} list={list} index={index}/>)}
                     {isAddingColumn ?
                         <div className={`add-card-container p-md ${theme}`}>
-                            <textarea className={`focus ${theme}`} onBlur={handleOnBlur} autoFocus onChange={handleOnTextAreaChange}
+                            <textarea className={`focus ${theme}`} onBlur={handleOnBlur} autoFocus
+                                      onChange={handleOnTextAreaChange}
                                       value={textAreaValue}/>
                             <div className="actions">
-                                <button className={`btn ${theme}`} disabled={!textAreaValue.trim()} onClick={onAddList}>Add list
+                                <button className={`btn ${theme}`} disabled={!textAreaValue.trim()}
+                                        onClick={onAddList}>Add list
                                 </button>
-                                <button className={`btn btn-transparent ${theme}`} onClick={handleOnCloseClick}><AiOutlineClose/>
+                                <button className={`btn btn-transparent ${theme}`} onClick={handleOnCloseClick}>
+                                    <AiOutlineClose/>
                                 </button>
                             </div>
                         </div>
