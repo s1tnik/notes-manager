@@ -58,9 +58,6 @@ textarea, input {
 
 }
 
-
-
-
 .dnd-wrapper {
   overflow-y: visible;
   overflow-x: scroll;
@@ -129,8 +126,8 @@ textarea, input {
   height: 64px;
   margin: 8px;
   border-radius: 50%;
-  border: 6px solid #cef;
-  border-color: #cef transparent #cef transparent;
+  border: 6px solid colors.$primary;
+  border-color: colors.$primary transparent colors.$primary transparent;
   animation: loader 1.2s linear infinite;
 }
 
