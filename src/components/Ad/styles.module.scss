@@ -1,3 +1,5 @@
+@use "../../styles/colors";
+
 .ad {
   width: 100%;
   display: flex;
@@ -6,4 +8,5 @@
   flex-direction: column;
   margin-top: 15px;
   border-radius: 10px;
+  background-color: colors.$light;
 }

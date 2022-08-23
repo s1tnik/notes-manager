@@ -8,7 +8,7 @@ export const Ad: React.FC = () => {
     const {status, currentAdd} = useSelector((state: RootState) => state.ad);
 
     return (
-        <div className={`${styles.ad} bg-light p-xl`}>
+        <div className={`${styles.ad} p-xl`}>
             {status === "loading" && <div className="loader"/>}
             {status === "failed" && <p>You can place your ad here.</p>}
             {status === "idle" && currentAdd && (
