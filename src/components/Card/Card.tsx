@@ -168,7 +168,7 @@ export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, ind
                 <EmptyCard style={{height: draggableCard?.height}}/>}
 
                 <div onClick={() => setOpen(true)} ref={mergeRefs([drag, drop, cardRef])}
-                     className={`${styles.card} p-xl bg-light`}>
+                     className={`${styles.card} p-xl`}>
                     <p className="title">{title}</p>
                     {description && <p className="txt-sm">{description.length > 100 ? `${description.slice(0, 150)}
                         ...` : description}</p>}

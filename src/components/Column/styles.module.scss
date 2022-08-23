@@ -23,6 +23,8 @@
   justify-content: space-between;
   align-items: center;
   gap: spacing.$md;
+  background-color: colors.$primary;
+  color: colors.$light
 }
 
 .columnFooter {
@@ -54,6 +56,7 @@
   width: max(300px, 20vw);
   box-shadow: 0 0 9px 1px colors.$primary;
   border-radius: 5px;
+  background-color: colors.$light;
 
   & :global {
     .menu-item {

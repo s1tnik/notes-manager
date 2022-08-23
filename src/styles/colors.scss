@@ -1,46 +1,4 @@
-$dark: #212121;
+$dark: #3F3F3F;
 $primary: #6D9886;
-$secondary: #D9CAB3;
+$secondary: #B4832F;
 $light: #F6F6F6;
-
-.bg {
-  &-dark {
-    background-color: $dark;
-    color: $light;
-  }
-
-  &-primary {
-    background-color: $primary;
-    color: $light;
-  }
-
-  &-secondary {
-    background-color: $secondary;
-    color: $light;
-  }
-
-  &-light {
-    background-color: $light;
-    color: $dark;
-  }
-}
-
-.color {
-
-  &-dark {
-    color: $dark;
-  }
-
-  &-light {
-    color: $light;
-  }
-
-  &-primary {
-    color: $primary;
-  }
-
-  &-secondary {
-    color: $secondary;
-  }
-
-}

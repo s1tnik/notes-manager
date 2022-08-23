@@ -59,7 +59,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
     }
 
     return (
-        <div className={`${styles.columnHeader} bg-primary p-xl`}>
+        <div className={`${styles.columnHeader} p-xl`}>
             {header}
             <Popup
                 trigger={<button><AiOutlineEllipsis/></button>}
@@ -73,7 +73,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                 {close => (
                     <>
                         {currentAction === ActionsEnum.INITIAL && (
-                            <div className={`${styles.menu} bg-light`}>
+                            <div className={`${styles.menu}`}>
                                 <div className="menu-item p-md">
                                     <span/>
                                     <p>List actions</p>
@@ -89,7 +89,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                             </div>
                         )}
                         {currentAction === ActionsEnum.COPY_LIST && (
-                            <div className={`${styles.menu} bg-light`}>
+                            <div className={`${styles.menu}`}>
                                 <div className="menu-item p-md">
                                     <span onClick={() => setCurrentAction(ActionsEnum.INITIAL)}><AiOutlineLeft/></span>
                                     <p>Copy list</p>
@@ -104,7 +104,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({header, listId, setIs
                             </div>
                         )}
                         {currentAction === ActionsEnum.DELETE_LIST && (
-                            <div className={`${styles.menu} bg-light`}>
+                            <div className={`${styles.menu}`}>
                                 <div className="menu-item p-md">
                                     <span onClick={() => setCurrentAction(ActionsEnum.INITIAL)}><AiOutlineLeft/></span>
                                     <p>Delete list</p>
