@@ -6,7 +6,7 @@ type theme = "light" | "dark"
 const getCurrentTheme = (): theme => {
     const currentHour = new Date().getHours();
 
-    if (currentHour >= 18 && currentHour < 6) {
+    if (currentHour >= 18 || currentHour < 6) {
         return "dark"
     }
 
