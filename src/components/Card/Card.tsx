@@ -1,187 +1,214 @@
-import React, {useEffect, useRef, useState} from "react";
-import styles from "./styles.module.scss"
-import {useDrag, useDrop} from 'react-dnd'
-import {ICard, ItemTypes} from '../../types/index'
-import {useAppDispatch} from "../../app/hooks";
-import {setDraggableCard, setHoveredCard, resetDraggingState} from "../../app/draggingSlice"
-import {useSelector} from "react-redux";
-import {RootState} from "../../app/store";
-import {mergeRefs} from "react-merge-refs";
+import React, { useEffect, useRef, useState } from "react";
+import styles from "./styles.module.scss";
+import { useDrag, useDrop } from "react-dnd";
+import { ICard, ItemTypes } from "../../types/index";
+import { useAppDispatch } from "../../app/hooks";
+import { setDraggableCard, setHoveredCard, resetDraggingState } from "../../app/draggingSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { mergeRefs } from "react-merge-refs";
 import EmptyCard from "../EmptyCard";
 import Popup from "reactjs-popup";
-import {AiOutlineClose} from "react-icons/ai";
-import {changeCard} from "../../app/listsSlice";
+import { AiOutlineClose } from "react-icons/ai";
+import { changeCard } from "../../app/listsSlice";
 import Ad from "../Ad";
 import { ThemeContext } from "../../context/themeContext";
 
 interface CardProps {
-    card: ICard
-    onClick?: () => void;
-    listId: string;
-    listIndex: number;
-    index: number;
+  card: ICard;
+  listId: string;
+  listIndex: number;
+  index: number;
 }
 
-export const Card: React.FC<CardProps> = ({card, listId, onClick, listIndex, index}) => {
+export const Card: React.FC<CardProps> = ({ card, listId, listIndex, index }) => {
+  const { id, title, description } = card;
 
-    const {id, title, description} = card;
+  const dispatch = useAppDispatch();
+  const { hoveredCard, draggableCard, list } = useSelector((state: RootState) => ({
+    ...state.dragging,
+    list: state.lists[listId]
+  }));
 
-    const dispatch = useAppDispatch();
-    const {hoveredCard, draggableCard, list} = useSelector((state: RootState) => ({
-        ...state.dragging,
-        list: state.lists[listId]
-    }));
+  const theme = React.useContext(ThemeContext);
 
-    const theme = React.useContext(ThemeContext);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-    const cardRef = useRef<HTMLDivElement>(null);
+  const [cardValues, setCardValues] = useState({
+    title: card.title,
+    description: card.description
+  });
 
-    const [cardValues, setCardValues] = useState({title: card.title, description: card.description});
+  const handleCardValueChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: "title" | "description"
+  ) => {
+    setCardValues((prev) => ({ ...prev, [type]: e.target.value }));
+  };
 
-    const handleCardValueChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, type: "title" | 'description') => {
-        setCardValues(prev => ({...prev, [type]: e.target.value}))
+  const [open, setOpen] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const closeModal = () => {
+    if (cardValues.title !== card.title || cardValues.description !== card.description) {
+      setShowConfirmation(true);
+    } else {
+      setOpen(false);
+      setCardValues({ title: card.title, description: card.description });
     }
+  };
 
-    const [open, setOpen] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false);
+  const onSave = () => {
+    if (!cardValues.title) return;
+    dispatch(changeCard({ cardData: cardValues, listId, cardIndex: index }));
+    setOpen(false);
+  };
 
-    const closeModal = () => {
-        if (cardValues.title !== card.title || cardValues.description !== card.description) {
-            setShowConfirmation(true);
-        } else {
-            setOpen(false);
-            setCardValues({title: card.title, description: card.description});
-        }
-    };
+  const onConfirmClick = () => {
+    setShowConfirmation(false);
+    setOpen(false);
+    setCardValues({ title: card.title, description: card.description });
+  };
 
-    const onSave = () => {
-        if (!cardValues.title) return;
-        dispatch(changeCard({cardData: cardValues, listId, cardIndex: index}))
-        setOpen(false);
+  const onDenyClick = () => {
+    setShowConfirmation(false);
+  };
+
+  const [{ isDraggingCard }, drag] = useDrag(() => ({
+    type: ItemTypes.CARD,
+    end: () => {
+      dispatch(resetDraggingState());
+    },
+    collect: (monitor) => ({
+      isDraggingCard: monitor.isDragging()
+    })
+  }));
+
+  const [, drop] = useDrop(() => ({
+    accept: ItemTypes.CARD,
+    hover: (_, monitor) => {
+      const clientOffset = monitor.getClientOffset();
+
+      if (!cardRef.current || !clientOffset) return;
+
+      const rect = cardRef.current.getBoundingClientRect();
+      const y = clientOffset.y - rect.top;
+      const height = rect.height;
+
+      if (y > height / 2) {
+        dispatch(setHoveredCard({ from: "bottom", card, index, listId }));
+      } else {
+        dispatch(setHoveredCard({ from: "top", card, index, listId }));
+      }
     }
+  }));
 
-    const onConfirmClick = () => {
-        setShowConfirmation(false);
-        setOpen(false);
-        setCardValues({title: card.title, description: card.description});
+  useEffect(() => {
+    if (draggableCard?.card.id !== id && cardRef.current && isDraggingCard) {
+      dispatch(setDraggableCard({ card, height: cardRef.current.clientHeight, index, listId }));
     }
+  }, [card, dispatch, isDraggingCard, listId, listIndex, index, draggableCard, id]);
 
-    const onDenyClick = () => {
-        setShowConfirmation(false);
-    }
+  if (draggableCard?.card.id === id && !hoveredCard) {
+    return <EmptyCard style={{ height: draggableCard?.height }} />;
+  }
 
-    const [{isDraggingCard}, drag] = useDrag(() => ({
-        type: ItemTypes.CARD,
-        end: () => {
-            dispatch(resetDraggingState())
-        },
-        collect: monitor => ({
-            isDraggingCard: monitor.isDragging(),
-        }),
-    }))
+  if (!draggableCard || draggableCard.card.id !== card.id) {
+    const renderShallowCard = !!hoveredCard && id === hoveredCard.card?.id;
 
-    const [, drop] = useDrop(() => ({
-        accept: ItemTypes.CARD,
-        hover: (_, monitor) => {
-            const clientOffset = monitor.getClientOffset();
-
-            if (!cardRef.current || !clientOffset) return;
-
-            const rect = cardRef.current.getBoundingClientRect();
-            const y = clientOffset.y - rect.top;
-            const height = rect.height;
-
-            if (y > height / 2) {
-                dispatch(setHoveredCard({from: "bottom", card, index, listId}))
-            } else {
-                dispatch(setHoveredCard({from: "top", card, index, listId}))
-            }
-
-        },
-
-    }))
-
-    useEffect(() => {
-
-        if (draggableCard?.card.id !== id && cardRef.current && isDraggingCard) {
-            dispatch(setDraggableCard({card, height: cardRef.current.clientHeight, index, listId}));
-        }
-
-    }, [card, dispatch, isDraggingCard, listId, listIndex, index, draggableCard, id]);
-
-
-    if (draggableCard?.card.id === id && !hoveredCard) {
-        return <EmptyCard style={{height: draggableCard?.height}}/>
-    }
-
-    if (!draggableCard || draggableCard.card.id !== card.id) {
-
-        const renderShallowCard = !!hoveredCard && id === hoveredCard.card?.id;
-
-        return (
-            <>
-                <Popup open={open}
-                       closeOnDocumentClick={cardValues.title === card.title && cardValues.description === card.description}
-                       onClose={closeModal}>
-                    <div className={`${styles.modal} ${styles[theme]} p-xl`}>
-                        {showConfirmation ?
-                            <div className="confirmation">
-                                <h2>Are you sure you want to discard your changes?</h2>
-                                <div>
-                                    <button onClick={onConfirmClick} className={`btn ${theme}`}>Yes</button>
-                                    <button onClick={onDenyClick} className={`btn btn-transparent ${theme}`}>No</button>
-                                </div>
-                            </div>
-                            :
-                            <>
-                                <div className="title-container">
-                                    <div className="input-container">
-                                        <input autoFocus className={`${!cardValues.title ? "focus" : ""} ${theme} p-sm txt-md`}
-                                               onChange={(e) => handleCardValueChange(e, "title")}
-                                               value={cardValues.title}
-                                               type="text"/>
-                                        <span onClick={closeModal}><AiOutlineClose/></span>
-                                    </div>
-                                    <p className="txt-sm">In list "{list.name}"</p>
-                                </div>
-                                <div className="description-container">
-                                    <div>
-                                        <h2 className="txt-md">Description</h2>
-                                    </div>
-                                    <div className="text-area">
-                                            <textarea className={`focus ${theme}`}
-                                                      onChange={(e) => handleCardValueChange(e, "description")}
-                                                      autoFocus
-                                                      value={cardValues.description}/>
-                                        <div>
-                                            <button disabled={!cardValues.title.trim()} onClick={onSave}
-                                                    className={`btn ${theme}`}>Save
-                                            </button>
-                                            <button onClick={closeModal} className={`btn btn-transparent ${theme}`}>Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>}
-                        <Ad/>
-                    </div>
-                </Popup>
-
-                {renderShallowCard && hoveredCard?.from === "top" &&
-                <EmptyCard style={{height: draggableCard?.height}}/>}
-
-                <div onClick={() => setOpen(true)} ref={mergeRefs([drag, drop, cardRef])}
-                     className={`${styles.card} ${styles[theme]} p-xl`}>
-                    <p className="title">{title}</p>
-                    {description && <p className="txt-sm">{description.length > 100 ? `${description.slice(0, 150)}
-                        ...` : description}</p>}
+    return (
+      <>
+        <Popup
+          open={open}
+          closeOnDocumentClick={
+            cardValues.title === card.title && cardValues.description === card.description
+          }
+          onClose={closeModal}>
+          <div className={`${styles.modal} ${styles[theme]} p-xl`}>
+            {showConfirmation ? (
+              <div className="confirmation">
+                <h2>Are you sure you want to discard your changes?</h2>
+                <div>
+                  <button onClick={onConfirmClick} className={`btn ${theme}`}>
+                    Yes
+                  </button>
+                  <button onClick={onDenyClick} className={`btn btn-transparent ${theme}`}>
+                    No
+                  </button>
                 </div>
+              </div>
+            ) : (
+              <>
+                <div className="title-container">
+                  <div className="input-container">
+                    <input
+                      autoFocus
+                      className={`${!cardValues.title ? "focus" : ""} ${theme} p-sm txt-md`}
+                      onChange={(e) => handleCardValueChange(e, "title")}
+                      value={cardValues.title}
+                      type="text"
+                    />
+                    <span onClick={closeModal}>
+                      <AiOutlineClose />
+                    </span>
+                  </div>
+                  <p className="txt-sm">In list &quot;{list.name}&quot;</p>
+                </div>
+                <div className="description-container">
+                  <div>
+                    <h2 className="txt-md">Description</h2>
+                  </div>
+                  <div className="text-area">
+                    <textarea
+                      className={`focus ${theme}`}
+                      onChange={(e) => handleCardValueChange(e, "description")}
+                      autoFocus
+                      value={cardValues.description}
+                    />
+                    <div>
+                      <button
+                        disabled={!cardValues.title.trim()}
+                        onClick={onSave}
+                        className={`btn ${theme}`}>
+                        Save
+                      </button>
+                      <button onClick={closeModal} className={`btn btn-transparent ${theme}`}>
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+            <Ad />
+          </div>
+        </Popup>
 
-                {renderShallowCard && hoveredCard?.from === "bottom" &&
-                <EmptyCard style={{height: draggableCard?.height}}/>}
-            </>
-        )
-    }
+        {renderShallowCard && hoveredCard?.from === "top" && (
+          <EmptyCard style={{ height: draggableCard?.height }} />
+        )}
 
-    return null;
-}
+        <div
+          onClick={() => setOpen(true)}
+          ref={mergeRefs([drag, drop, cardRef])}
+          className={`${styles.card} ${styles[theme]} p-xl`}>
+          <p className="title">{title}</p>
+          {description && (
+            <p className="txt-sm">
+              {description.length > 100
+                ? `${description.slice(0, 150)}
+                        ...`
+                : description}
+            </p>
+          )}
+        </div>
+
+        {renderShallowCard && hoveredCard?.from === "bottom" && (
+          <EmptyCard style={{ height: draggableCard?.height }} />
+        )}
+      </>
+    );
+  }
+
+  return null;
+};
