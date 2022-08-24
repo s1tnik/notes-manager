@@ -45,7 +45,7 @@ export const draggingSlice = createSlice({
     setHoveredList: (state, action: PayloadAction<DraggingState["hoveredList"]>) => {
       state.hoveredList = action.payload;
     },
-    resetDraggingState: (state) => {
+    resetDraggingState: () => {
       return initialState;
     }
   }

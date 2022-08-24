@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Advertisement } from "../types";
 
-export const fetchAdById = createAsyncThunk("ad/fetchByIdStatus", async (postId, thunkAPI) => {
+export const fetchAdById = createAsyncThunk("ad/fetchByIdStatus", async (postId) => {
   const response = await axios.get<Advertisement>(
     "https://jsonplaceholder.typicode.com/posts/" + postId
   );
@@ -24,7 +24,7 @@ const advertisementSlice = createSlice({
   name: "ad",
   initialState,
   reducers: {
-    resetadvertisementState: (state) => {
+    resetadvertisementState: () => {
       return initialState;
     },
     resetAd: (state) => {

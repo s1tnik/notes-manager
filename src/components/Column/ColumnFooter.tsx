@@ -33,7 +33,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({
 
   const [, drop] = useDrop(() => ({
     accept: ItemTypes.CARD,
-    hover: (_, monitor) => {
+    hover: () => {
       dispatch(setHoveredCard({ shallowCard: true, listId }));
     }
   }));
