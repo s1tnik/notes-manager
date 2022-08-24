@@ -1,23 +1,26 @@
-# Getting Started
+## Table of Contents
+1. [General Info](#general-info)
+2. [Technologies](#technologies)
+3. [Installation](#installation)
+## General Info
+***
+Notes manager enables users to take down notes or thoughts in a text format. 
+## Technologies
+***
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
 
-## Available Scripts
+A list of technologies used within the project:
 
-In the project directory, you can run:
+* [redux-persist](https://github.com/rt2zz/redux-persist) - persisting the state of the app
+* [redux-thunk](https://github.com/reduxjs/redux-thunk) - async mutations inside redux
+* [react-dnd](https://github.com/react-dnd/react-dnd) - drag and drop logic
+## Installation
+***
+```
+$ git clone https://github.com/s1tnik/notes-manager.git
+$ cd ../path/to/the/file
+$ yarn install
+$ yarn start
+```
 
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
