@@ -14,7 +14,10 @@ export const EmptyCard: React.FC<EmptyCardProps> = ({ title, onClick, style }) =
   return (
     <div
       style={style}
-      onClick={() => onClick && onClick()}
+      onClick={(e) => {
+        e.currentTarget.scrollIntoView();
+        onClick && onClick();
+      }}
       className={`${styles.emptyCard} ${styles[theme]} p-xl`}>
       {title && <p className="title">{title}</p>}
     </div>
