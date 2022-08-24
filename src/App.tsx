@@ -34,8 +34,10 @@ function App() {
 
     let randomId = Math.floor(Math.random() * 101);
 
-    while (!usedAdvertisemens.includes(randomId)) {
-      randomId = Math.floor(Math.random() * 101);
+    if (usedAdvertisemens.length > 0) {
+      while (!usedAdvertisemens.includes(randomId)) {
+        randomId = Math.floor(Math.random() * 101);
+      }
     }
 
     dispatch(fetchAdById(randomId));
