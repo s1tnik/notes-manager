@@ -21,7 +21,7 @@ const persistedReducer = persistReducer(
 );
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: persistedReducer
 });
 
 export type AppDispatch = typeof store.dispatch;
