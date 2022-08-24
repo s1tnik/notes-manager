@@ -2,6 +2,7 @@
 1. [General Info](#general-info)
 2. [Technologies](#technologies)
 3. [Installation](#installation)
+4. [Demo](#demo)
 ## General Info
 ***
 Notes manager enables users to take down notes or thoughts in a text format. 
@@ -23,4 +24,6 @@ $ cd ../path/to/the/file
 $ yarn install
 $ yarn start
 ```
-
+## Demo
+***
+https://thunderous-scone-c20937.netlify.app/
